@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-md-5">
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input id="dayInput"
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dayControl"
+          placeholder="Enter a day" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="myForm.controls.dayControl.hasError('required')">
+          Day is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Player 1</mat-label>
+        <!--<mat-select formControlName="playerControl1" [(ngModel)]="playday.playerIds[0]">-->
+        <mat-select formControlName="playerControl1">
+          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
+            {{pl.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Player 2</mat-label>
+        <mat-select formControlName="playerControl2">
+          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
+            {{pl.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Player 3</mat-label>
+        <mat-select formControlName="playerControl3">
+          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
+            {{pl.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Player 4</mat-label>
+        <mat-select formControlName="playerControl4">
+          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
+            {{pl.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Player 5</mat-label>
+        <mat-select formControlName="playerControl5">
+          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
+            {{pl.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="myForm.errors && myForm.errors.equalPlayers">
+        Error: Equal players!
+      </div>
+
+      <!--
+      <mat-select placeholder="Choose Player" [formControl]="PlayerControl0">
+        <mat-select-trigger>
+          {{toppings.value ? toppings.value[0] : ''}}
+          <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+            (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+
+      <mat-form-field>
+        <mat-label>Choose Player</mat-label>
+        <mat-select placeholder="Choose Player" [formControl]="PlayerControl0">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let p of players" [value]="lastName">{{lastName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      -->
+      
+      <button mat-button type="submit" 
+                  class="mat-raised-button mat-primary" 
+                  [disabled]="!myForm.valid">Save</button>
+    </form>
+  </div>
+</div>

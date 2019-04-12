@@ -1,0 +1,46 @@
+ul.horizontal-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.horizontal-list li {
+  float: left;
+}
+
+ul.horizontal-list li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.horizontal-list li a:hover {
+  background-color: gray;
+}
+
+ul.horizontal-list li.float-right {
+  float: right;
+}
+
+ul.horizontal-list li .header {
+  display: block;
+  color: gray;
+  font-size: 2em;
+  text-align: center;
+  text-decoration: none;
+  padding-left: 14px;
+  padding-top: 4px;
+  padding-right: 20px;
+}
+
+ul.horizontal-list li {
+  border-right: 1px solid #bbb;
+}
+
+ul.horizontal-list li:last-child {
+  border-right: none;
+}

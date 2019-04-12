@@ -1,0 +1,48 @@
+{
+  "Players": [ {
+    "id": 1,
+    "firstName": "Frank",
+    "lastName": "Augustin"
+  }, {
+    "id": 2,
+    "firstName": "Thomas",
+    "lastName": "Busalla"
+  }, {
+    "id": 3,
+    "firstName": "Markus",
+    "lastName": "Philipp"
+  }, {
+    "id": 4,
+    "firstName": "Marc",
+    "lastName": "Nordmann"
+  }, {
+    "id": 5,
+    "firstName": "Jan-Niklas",
+    "lastName": "Schäfer"
+  } ],
+  "PlayDays": [ {
+    "id": 1,
+    "day": "2019-04-04",
+    "playerIds": [],
+    "isCancelled": false,
+    "extraPayIds": [],
+    "numOfHours": 1,
+    "numOfCourts": 1,
+    "remark": null
+  }, {
+    "id": 2,
+    "day": "2019-04-11",
+    "playerIds": [],
+    "isCancelled": false,
+    "extraPayIds": [],
+    "numOfHours": 1,
+    "numOfCourts": 1,
+    "remark": null
+  } ],
+  "ExtraPay": [ {
+    "id": 1,
+    "playerId": 1,
+    "amount": 0,
+    "remark": "licht"
+  } ]
+}
