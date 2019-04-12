@@ -17,6 +17,7 @@ export class DataService {
     return this.afs.collection<Player>('/Players').valueChanges();
   }
 
+  
   /*
   postsCol: AngularFirestoreCollection<Post>;
   //posts: Observable<Post[]>;
