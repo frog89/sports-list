@@ -1,92 +1,78 @@
 <div class="row">
   <div class="col-md-5">
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-      <mat-form-field>
-        <input id="dayInput"
-          matInput
-          [matDatepicker]="picker"
-          formControlName="dayControl"
-          placeholder="Enter a day" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="myForm.controls.dayControl.hasError('required')">
-          Day is required!
-        </mat-error>
-      </mat-form-field>
+      <mat-grid-list cols="2" gutterSize="10" rowHeight="4:1">
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="outline" color="gray">
+            <input id="dayInput"
+              matInput
+              [matDatepicker]="picker"
+              formControlName="dayControl"
+              placeholder="Enter a day" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="myForm.controls.dayControl.hasError('required')">
+              Day is required!
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile *ngFor="let allPl of allPlayers; let i=index;">
+          <mat-form-field>
+            <mat-label>Player {{ allPl.id }}</mat-label>
+            <mat-select [formControlName]="'playerControl' + (i+1)">
+              <mat-option *ngFor="let chPl of choosablePlayers" [value]="chPl.id">
+                {{chPl.display}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="allPlayers != null && allPlayers.length % 2 == 0 ? 2 : 1">
+          <mat-error *ngIf="myForm.errors && myForm.errors.equalPlayers">
+            Error: Please choose different players!
+          </mat-error>      
+        </mat-grid-tile>
 
-      <mat-form-field>
-        <mat-label>Player 1</mat-label>
-        <!--<mat-select formControlName="playerControl1" [(ngModel)]="playday.playerIds[0]">-->
-        <mat-select formControlName="playerControl1">
-          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
-            {{pl.display}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Player 2</mat-label>
-        <mat-select formControlName="playerControl2">
-          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
-            {{pl.display}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Player 3</mat-label>
-        <mat-select formControlName="playerControl3">
-          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
-            {{pl.display}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Player 4</mat-label>
-        <mat-select formControlName="playerControl4">
-          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
-            {{pl.display}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Player 5</mat-label>
-        <mat-select formControlName="playerControl5">
-          <mat-option *ngFor="let pl of choosablePlayers" [value]="pl.id">
-            {{pl.display}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div *ngIf="myForm.errors && myForm.errors.equalPlayers">
-        Error: Equal players!
-      </div>
-
-      <!--
-      <mat-select placeholder="Choose Player" [formControl]="PlayerControl0">
-        <mat-select-trigger>
-          {{toppings.value ? toppings.value[0] : ''}}
-          <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-            (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-          </span>
-        </mat-select-trigger>
-        <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-      </mat-select>
-
-      <mat-form-field>
-        <mat-label>Choose Player</mat-label>
-        <mat-select placeholder="Choose Player" [formControl]="PlayerControl0">
-          <mat-option>None</mat-option>
-          <mat-option *ngFor="let p of players" [value]="lastName">{{lastName}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      -->
+        <mat-grid-tile colspan="2">
+          <mat-checkbox id="idIsCancelled" formControlName="isCancelled">Cancelled?</mat-checkbox>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <mat-form-field>
+            <input matInput id="idNumOfHours" type="number" formControlName="numOfHours"/>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidCancelledButHoursGreaterZero">
+          <mat-error>
+            Error: Day is cancelled but number of hours is > 0!
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButHoursZero">
+          <mat-error>
+            Error: Day is not cancelled but number of hours is &lt;= 0!
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <mat-form-field>
+            <input matInput id="idNumOfCourts" type="number" formControlName="numOfCourts"/>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidCancelledButCourtsGreaterZero">
+          <mat-error>
+            Error: Day is cancelled but number of courts is > 0!
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButCourtsZero">
+          <mat-error>
+            Error: Day is not cancelled but number of courts is &lt;= 0!
+          </mat-error>
+        </mat-grid-tile>
       
-      <button mat-button type="submit" 
-                  class="mat-raised-button mat-primary" 
-                  [disabled]="!myForm.valid">Save</button>
+        <mat-grid-tile colspan="2">
+          <button mat-button type="submit" style="width: 80%;"
+            class="mat-raised-button mat-primary" 
+            [disabled]="!myForm.valid">Save</button>
+        </mat-grid-tile>
+      </mat-grid-list>
     </form>
   </div>
 </div>
