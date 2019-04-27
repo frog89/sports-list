@@ -1,46 +1,23 @@
-ul.horizontal-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
+@import './src/app-theme.scss';
+
+.main-menu {
+  height: 50px;
+  background-color: mat-color($app-primary);
 }
 
-ul.horizontal-list li {
-  float: left;
-}
-
-ul.horizontal-list li a {
+.app-menu-button {
+  margin: 0px 10px;
+  padding: 0px;
+  font-weight: bold;
+  color: mat-color($app-accent);
+  background-color: mat-color($app-primary, 400);
   display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
 }
 
-ul.horizontal-list li a:hover {
-  background-color: gray;
-}
-
-ul.horizontal-list li.float-right {
-  float: right;
-}
-
-ul.horizontal-list li .header {
-  display: block;
-  color: gray;
-  font-size: 2em;
-  text-align: center;
-  text-decoration: none;
-  padding-left: 14px;
-  padding-top: 4px;
-  padding-right: 20px;
-}
-
-ul.horizontal-list li {
-  border-right: 1px solid #bbb;
-}
-
-ul.horizontal-list li:last-child {
-  border-right: none;
+.app-title {
+  margin-top: 5px;
+  color: mat-color($app-accent);
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 20px 5px;
 }

@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 
 import { PlayDay } from 'src/app/model/playday.model';
-import { Player } from 'src/app/model/player.model';
+import { IPlayer } from 'src/app/model/player.model';
 import { DataService } from '../../shared/data.service';
+import { MatCheckbox } from '@angular/material';
+import { slideIn } from '../../shared/animations';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 export interface PlayerItem {
   id: number;
@@ -14,48 +18,26 @@ export interface PlayerItem {
 @Component({
   selector: 'app-edit-playday',
   templateUrl: './edit-playday.component.html',
-  styleUrls: ['./edit-playday.component.scss']
+  styleUrls: ['./edit-playday.component.scss'],
+  animations: [
+    slideIn
+  ]
 })
 export class EditPlaydayComponent implements OnInit {
   myForm: FormGroup;
   playday: PlayDay;
-  allPlayers: Player[];
+  allPlayers: IPlayer[];
   choosablePlayers: PlayerItem[] = [];
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
       private dataService: DataService) { 
-    this.playday = {
-      id: 4711,
-      day: new Date(2018,0,28),
-      playerIds: [1, 3],
-      extraPayIds: [],
-      isCancelled: false,
-      numOfHours: 1,
-      numOfCourts: 1
-    }
-
-    this.dataService.getPlayers().subscribe(
-      p => {
-        this.allPlayers = p;
-        this.initPlaydayForm();
-      } );
-  }
-
-  ngOnInit() {
-    let id = +this.route.snapshot.paramMap.get('id');
-
     this.myForm = this.fb.group( {
-      dayControl: [this.playday.day, Validators.compose([Validators.required])],
-      isCancelled: [this.playday.isCancelled],
-      numOfHours: [this.playday.numOfHours],
-      numOfCourts: [this.playday.numOfCourts]
+      day: [null, Validators.compose([Validators.required])],
+      isCancelled: [],
+      numOfHours: [],
+      numOfCourts: []
     });
-
-    for (var i: number = 0; i < 10; i++) {
-      var controlName : string = `playerControl${i+1}`;
-      var ctrl : FormControl = new FormControl(null);
-      this.myForm.addControl(controlName, ctrl);
-    }
+    this.myForm.addControl("players", new FormArray([]));    
 
     this.myForm.validator = Validators.compose([
       this.valiDifferentPlayers(),
@@ -63,6 +45,34 @@ export class EditPlaydayComponent implements OnInit {
         this.myForm.controls.isCancelled,
         this.myForm.controls.numOfHours,
         this.myForm.controls.numOfCourts)]);
+  }
+
+  onCancelClicked(cb: MatCheckbox) {
+    if (cb.checked) {
+      this.myForm.controls.numOfHours.setValue(1);
+      this.myForm.controls.numOfCourts.setValue(1);
+    } else {
+      this.myForm.controls.numOfHours.setValue(0);
+      this.myForm.controls.numOfCourts.setValue(0);
+    }
+  }
+
+  ngOnInit() {
+    // Fetch Playday for passed id
+    this.dataService.getPlayers().subscribe(
+      p => {
+        this.allPlayers = p;
+        this.loadPlayDay();
+      } );
+  }
+
+  loadPlayDay() : void {
+    let id = +this.route.snapshot.paramMap.get('id');
+    this.dataService.getPlayDay(id).subscribe(
+      pd => {
+        this.playday = pd.length == 1 ? pd[0] : null;
+        this.initFormAfterDataLoad();
+      });
   }
 
   valiCancelledAndCourtsAndHours(isCancelledCtrl: AbstractControl, 
@@ -82,11 +92,11 @@ export class EditPlaydayComponent implements OnInit {
 
   valiDifferentPlayers() {
     return (group: FormGroup): {[key: string]: any} => {
-      let values = [group.controls.playerControl1.value,
-        group.controls.playerControl2.value,
-        group.controls.playerControl3.value,
-        group.controls.playerControl4.value,
-        group.controls.playerControl5.value];
+      let values: number[] = [];
+      let arr = <FormArray>group.controls.players;
+      for (let ctrl of arr.controls) {
+        values.push(ctrl.value);
+      }
       for (var i: number = 0; i<values.length; i++) {
         for (var j: number = i+1; j<values.length; j++) {
           if (values[i] != null && values[j] != null && values[i] == values[j]) {
@@ -99,19 +109,27 @@ export class EditPlaydayComponent implements OnInit {
     }
   }
   
-  initPlaydayForm() : void {
-    for (var i: number = 0; i < this.allPlayers.length; i++) {
-      var playerId : number = this.allPlayers[i].id;
-      this.choosablePlayers.push( { 
-        id: playerId,
-        display: this.getPlayerNameById(playerId)
+  initFormAfterDataLoad() : void {
+    let playerArray: FormArray = this.myForm.get("players") as FormArray;
+    for (let i: number = 0; i < this.allPlayers.length; i++) {
+      let player: IPlayer = this.allPlayers[i];
+      playerArray.push(new FormControl());
+      this.choosablePlayers.push({
+        id: player.id,
+        display: this.getPlayerNameById(player.id)
       });
     }
-
-    for (var i: number = 0; i < this.playday.playerIds.length; i++) {
-      var playerId : number = this.playday.playerIds[i];
-      var controlName : string = `playerControl${i+1}`;
-      this.myForm.controls[controlName].setValue(playerId);
+    if (this.playday != null) {
+      let arr : FormArray = <FormArray>this.myForm.get("players");
+      for (let i : number=0; i < arr.length && i < this.playday.playerIds.length; i++) {
+        let fc:FormControl = <FormControl>arr.at(i);
+        fc.setValue(this.playday.playerIds[i]);
+      }
+        
+      this.myForm.controls.day.setValue(this.playday.day.toDate());
+      this.myForm.controls.isCancelled.setValue(this.playday.isCancelled);
+      this.myForm.controls.numOfHours.setValue(this.playday.numOfHours);
+      this.myForm.controls.numOfCourts.setValue(this.playday.numOfCourts);
     }
 
     //this.myForm.valueChanges.subscribe(console.log);
@@ -127,10 +145,10 @@ export class EditPlaydayComponent implements OnInit {
   }
   */
    getPlayerNameById(id: number) : string {
-     var p: Player = this.allPlayers == null ? null : this.allPlayers.find(p => p.id == id);
+     var p: IPlayer = this.allPlayers == null ? null : this.allPlayers.find(p => p.id == id);
      return this.getPlayerName(p);
    }
-   getPlayerName(p: Player) : string {
+   getPlayerName(p: IPlayer) : string {
      if (p == null)
        return "?";
      return `${p.lastName}, ${p.firstName}`;

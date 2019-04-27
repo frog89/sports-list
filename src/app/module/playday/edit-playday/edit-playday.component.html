@@ -1,78 +1,113 @@
-<div class="row">
-  <div class="col-md-5">
-    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-      <mat-grid-list cols="2" gutterSize="10" rowHeight="4:1">
-        <mat-grid-tile colspan="2">
+<div fxLayout="row" fxLayoutAlign="space-around center">
+
+<mat-card class="edit-playground-card">
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between">
+
+      <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
+        <div @slideIn class="page-header">Edit Playday</div>
+        <div fxFlex="1 1 auto">
           <mat-form-field appearance="outline" color="gray">
             <input id="dayInput"
               matInput
               [matDatepicker]="picker"
-              formControlName="dayControl"
+              formControlName="day"
               placeholder="Enter a day" />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="myForm.controls.dayControl.hasError('required')">
+            <mat-error *ngIf="myForm.controls.day.hasError('required')">
               Day is required!
             </mat-error>
           </mat-form-field>
-        </mat-grid-tile>
-        
-        <mat-grid-tile *ngFor="let allPl of allPlayers; let i=index;">
-          <mat-form-field>
-            <mat-label>Player {{ allPl.id }}</mat-label>
-            <mat-select [formControlName]="'playerControl' + (i+1)">
-              <mat-option *ngFor="let chPl of choosablePlayers" [value]="chPl.id">
-                {{chPl.display}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="allPlayers != null && allPlayers.length % 2 == 0 ? 2 : 1">
-          <mat-error *ngIf="myForm.errors && myForm.errors.equalPlayers">
-            Error: Please choose different players!
-          </mat-error>      
-        </mat-grid-tile>
+        </div>
+      </div>
+      
+      <div fxFlex="1 1 auto">
+        <div *ngIf="playday != null"
+            fxLayout="row wrap" fxLayoutGap="0px" fxLayoutAlign="space-around center">
+          <div fxFlex="0 1 calc(33.3% - 0px)" 
+              formArrayName="players"
+              *ngFor="let allPl of allPlayers; let i=index;">
+            <mat-form-field>
+              <mat-label>Player {{ allPl.id }}</mat-label>
+              <mat-select [formControlName]="i">
+                <mat-option *ngFor="let chPl of choosablePlayers" [value]="chPl.id">
+                  {{chPl.display}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>          
+          <div *ngIf="allPlayers != null && allPlayers.length % 2 == 1"
+              fxFlex="0 1 calc(33.3% - 0px)" style="height: 1px">
+            <div class="mat-form-field-wrapper">
+              <div class="mat-form-field-infix"></div>
+            </div>
+          </div>
+        </div>
+      </div> 
 
-        <mat-grid-tile colspan="2">
-          <mat-checkbox id="idIsCancelled" formControlName="isCancelled">Cancelled?</mat-checkbox>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
+      <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="center center" >
+        <mat-error *ngIf="myForm.errors && myForm.errors.equalPlayers"
+            appearance="outline">
+          Error: Please choose different players!
+        </mat-error>      
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div fxFlex="0 1 calc(30%-90px)" fxFlexOffset="30px" 
+            style="margin-top: 20px; margin-bottom: 20px;">
+          <mat-checkbox id="idIsCancelled" #eleIdIsCancelled 
+            (click)="onCancelClicked(eleIdIsCancelled)" 
+            formControlName="isCancelled">Cancelled?</mat-checkbox>
+        </div>
+      </div>
+
+      <div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <div fxFlex="0 1 calc(50%-45px)" fxFlexOffset="30px">
+          <label for="idNumOfHours" style="margin-right: 15px;"># Hours:</label>
           <mat-form-field>
             <input matInput id="idNumOfHours" type="number" formControlName="numOfHours"/>
           </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidCancelledButHoursGreaterZero">
-          <mat-error>
-            Error: Day is cancelled but number of hours is > 0!
-          </mat-error>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButHoursZero">
-          <mat-error>
-            Error: Day is not cancelled but number of hours is &lt;= 0!
-          </mat-error>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
+        </div>
+        <div fxFlex="0 1 calc(50%-45px)" fxFlexOffset="30px">
+          <label for="idNumOfCourts" style="margin-right: 15px;"># Courts:</label>
           <mat-form-field>
             <input matInput id="idNumOfCourts" type="number" formControlName="numOfCourts"/>
           </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidCancelledButCourtsGreaterZero">
-          <mat-error>
+        </div>
+      </div>
+
+      <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
+        <div fxFlex="1 1 auto" *ngIf="myForm.errors && myForm.errors.invalidCancelledButHoursGreaterZero">
+          <mat-error style="border: 2px solid Tomato;">
+            Error: Day is cancelled but number of hours is > 0!
+          </mat-error>
+        </div>
+        <div fxFlex="1 1 auto" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButHoursZero">
+          <mat-error appearance="outline">
+            Error: Day is not cancelled but number of hours is &lt;= 0!
+          </mat-error>
+        </div>
+        <div fxFlex="1 1 auto" *ngIf="myForm.errors && myForm.errors.invalidCancelledButCourtsGreaterZero">
+          <mat-error appearance="outline">
             Error: Day is cancelled but number of courts is > 0!
           </mat-error>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButCourtsZero">
-          <mat-error>
+        </div>
+        <div fxFlex="1 1 auto" *ngIf="myForm.errors && myForm.errors.invalidNotCancelledButCourtsZero">
+          <mat-error appearance="outline">
             Error: Day is not cancelled but number of courts is &lt;= 0!
           </mat-error>
-        </mat-grid-tile>
+        </div>
+      </div>
       
-        <mat-grid-tile colspan="2">
-          <button mat-button type="submit" style="width: 80%;"
-            class="mat-raised-button mat-primary" 
-            [disabled]="!myForm.valid">Save</button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </form>
+      <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
+        <button mat-button type="submit" style="width: 50%;"
+          class="mat-raised-button mat-primary" 
+          [disabled]="!myForm.valid">Save</button>
+      </div>
   </div>
+  </form>
+
+</mat-card>
+
 </div>

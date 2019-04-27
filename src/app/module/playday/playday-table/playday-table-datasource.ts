@@ -2,26 +2,20 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { PlayDay } from '../../../model/playday.model';
-
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: PlayDay[] = [
-  { id: 1, day: new Date(2019,4,4), playerIds: [], extraPayIds: [],
-    isCancelled: false,  numOfCourts: 1, numOfHours: 1},
-  { id: 2, day: new Date(2019,4,11), playerIds: [], extraPayIds: [],
-    isCancelled: false,  numOfCourts: 1, numOfHours: 1},
-];
+import { IPlayDay, PlayDay } from '../../../model/playday.model';
+import { DataService } from '../../shared/data.service';
 
 /**
  * Data source for the PlaydayTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class PlaydayTableDataSource extends DataSource<PlayDay> {
-  data: PlayDay[] = EXAMPLE_DATA;
+export class PlaydayTableDataSource extends DataSource<IPlayDay> {
+  playdays: IPlayDay[] = [];
 
-  constructor(private paginator: MatPaginator, private sort: MatSort) {
-    super();
+  constructor(private playDayArray: IPlayDay[], private paginator: MatPaginator, private sort: MatSort) {
+    super();    
+    this.playdays = playDayArray;
   }
 
   /**
@@ -29,20 +23,20 @@ export class PlaydayTableDataSource extends DataSource<PlayDay> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<PlayDay[]> {
+  connect(): Observable<IPlayDay[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
+
     const dataMutations = [
-      observableOf(this.data),
+      observableOf(this.playdays),
       this.paginator.page,
       this.sort.sortChange
     ];
-
     // Set the paginator's length
-    this.paginator.length = this.data.length;
+    this.paginator.length = this.playdays == null ? 0 : this.playdays.length;
 
     return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
+      return this.getPagedData(this.getSortedData([...this.playdays]));
     }));
   }
 
@@ -56,7 +50,7 @@ export class PlaydayTableDataSource extends DataSource<PlayDay> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: PlayDay[]) {
+  private getPagedData(data: IPlayDay[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -65,7 +59,7 @@ export class PlaydayTableDataSource extends DataSource<PlayDay> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: PlayDay[]) {
+  private getSortedData(data: IPlayDay[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }

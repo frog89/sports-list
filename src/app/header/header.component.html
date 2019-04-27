@@ -1,14 +1,34 @@
-<ul class="horizontal-list">
-  <li>
-    <div class="header">Badminton List</div>
-  </li>
-  <li>
-    <a class="nav-link" routerLink="/playdays">Play List</a>
-  </li>
-  <li class="float-right">
-    <a class="nav-link" routerLink="/about">About</a>
-  </li>
-  <li class="float-right">
-    <a class="nav-link" routerLink="/login">Login</a>
-  </li>              
-</ul>
+<div class="main-menu" fxLayout="row" fxLayoutAlign="space-around center">
+  <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="space-around center">
+    <button fxHide.gt-xs="TRUE" mat-icon-button [matMenuTriggerFor]="admin_menu">
+      <mat-icon>view_headline</mat-icon>
+    </button>
+    <div fxFlex="170px" class="app-title">Badminton List</div>
+    <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
+        color="primary" routerLink="playdays">
+      <span>Playdays</span>
+    </button>
+    <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
+        color="primary" routerLink="new-playday">
+      <span>New Playday</span>
+    </button>  
+    <div fxFlex="*"> </div>
+    <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
+        color="primary" [matMenuTriggerFor]="admin_menu">
+      <span>Admin</span>
+    </button>
+  </div>
+
+  <mat-menu #admin_menu="matMenu" xPosition="before">
+    <button mat-menu-item routerLink="logout">
+      <span>Logout</span>
+    </button>
+    <button mat-menu-item routerLink="settings">
+      <span>Settings</span>
+    </button>
+    <button mat-menu-item routerLink="about">
+      <span>About</span>
+    </button>
+  </mat-menu>
+</div>
+

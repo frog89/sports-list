@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Player } from '../../model/player.model';
+import { IPlayer } from '../../model/player.model';
 import { AngularFirestore } from 'angularfire2/firestore'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PlayDay } from 'src/app/model/playday.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,28 @@ export class DataService {
 
   constructor(private afs: AngularFirestore) { }
 
-  getPlayers() : Observable<Player[]> {
+  getPlayers() : Observable<IPlayer[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
-    return this.afs.collection<Player>('/Players').valueChanges();
+    //return this.afs.collection<IPlayer>('/Players', ref => 
+    //  ref.orderBy("lastname").orderBy("firstname")).
+    //  valueChanges();
+    return this.afs.collection<IPlayer>('/Players').
+      valueChanges();
   }
 
+  getPlayDays() : Observable<PlayDay[]> {
+    //return this.afs.collection<Player>('player', 
+    //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
+    return this.afs.collection<PlayDay>('/PlayDays').valueChanges();
+  }
+
+  getPlayDay(aId: number) : Observable<PlayDay[]> {
+    //return this.afs.collection<Player>('player', 
+    //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
+    return this.afs.collection<PlayDay>('/PlayDays', 
+      ref => ref.where('id', '==', aId)).valueChanges();
+  }
   
   /*
   postsCol: AngularFirestoreCollection<Post>;

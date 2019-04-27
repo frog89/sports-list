@@ -1,15 +1,22 @@
-<div class="mat-elevation-z8">
-  <table mat-table class="full-width-table" [dataSource]="dataSource" matSort aria-label="Elements">
-    <!-- Id Column -->
+<div fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between center" 
+    class="mat-elevation-z888">
+  <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Playday Overview</div>
+  <table fxFlex="1 0 100%" mat-table class="full-width-table" 
+      [dataSource]="dataSource" 
+      matSort aria-label="Elements">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
       <td mat-cell *matCellDef="let row">{{row.id}}</td>
     </ng-container>
 
-    <!-- Name Column -->
     <ng-container matColumnDef="day">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Day</th>
-      <td mat-cell *matCellDef="let row"><a  [routerLink]="['/playdays',row.id]">{{row.day | date:'yyyy-MM-dd' }}</a></td>
+      <td mat-cell *matCellDef="let row"><a  [routerLink]="['/playdays',row.id]">{{row.dayAsDate | date:'yyyy-MM-dd' }}</a></td>
+    </ng-container>
+
+    <ng-container *ngFor="let player of players; let i=index;" matColumnDef="p{{i}}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>P {{ i }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.hasPlayerPlayed(i) ? 'X' : null }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -17,7 +24,7 @@
   </table>
 
   <mat-paginator #paginator
-      [length]="dataSource.data.length"
+      [length]="dataSource == null ? 0 : dataSource.playdays == null ? 0 : dataSource.playdays.length"
       [pageIndex]="0"
       [pageSize]="50"
       [pageSizeOptions]="[25, 50, 100, 250]">

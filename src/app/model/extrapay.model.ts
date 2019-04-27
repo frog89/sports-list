@@ -1,4 +1,4 @@
-export interface ExtraPay {
+export interface IExtraPay {
   id: number;
   playerId: number;
   amount: number;
