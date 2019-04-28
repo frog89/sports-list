@@ -1,3 +1,10 @@
-.full-width-table {
-  width: 100%;
+mat-header-cell, mat-cell {
+  justify-content: center;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: lightgrey;
+}
+
+mat-header-row, mat-row {
+  min-height: 30px;
 }

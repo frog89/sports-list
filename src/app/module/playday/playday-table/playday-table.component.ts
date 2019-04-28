@@ -4,7 +4,7 @@ import { PlaydayTableDataSource } from './playday-table-datasource';
 import { slideIn } from '../../shared/animations';
 import { DataService } from '../../shared/data.service';
 import { IPlayDay, PlayDay } from 'src/app/model/playday.model';
-import { IPlayer } from 'src/app/model/player.model';
+import { IPlayer, Player } from 'src/app/model/player.model';
 
 @Component({
   selector: 'app-playday-table',
@@ -15,8 +15,8 @@ import { IPlayer } from 'src/app/model/player.model';
 export class PlaydayTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: PlaydayTableDataSource;
-  players : IPlayer[] = [];
+  dataSource: PlaydayTableDataSource | null;
+  players : Player[] = [];
 
   constructor(private dataService: DataService) {
   }
@@ -27,14 +27,17 @@ export class PlaydayTableComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = null;
 
-    this.dataService.getPlayers().subscribe(p => {
-      this.players = p;
-      for (let i: number = 0; i < this.players.length; i++) {
+    this.dataService.getPlayers().subscribe(firePlayers => {
+      this.players.length = 0;
+      for (let i: number = 0; i < firePlayers.length; i++) {
+        let player: IPlayer = firePlayers[i];
         let col: string = `p${i}`;
         this.displayedColumns.push(col);
+        this.players.push(new Player(player));
       }
 
-      console.log('DEBUG: ' + JSON.stringify(this.displayedColumns));
+      //console.log('DEBUG: ' + JSON.stringify(this.displayedColumns));
+      //console.log('DEBUG: ' + JSON.stringify(this.players));
 
       this.loadPlayDays();
     });
@@ -44,10 +47,9 @@ export class PlaydayTableComponent implements OnInit {
     this.dataService.getPlayDays().subscribe(playDays => {
       let playDayArray : IPlayDay[] = [];
       for(let playDay of playDays) {
-        let p: IPlayDay = playDay;
-        playDayArray.push(new PlayDay(this.players, p));
+        playDayArray.push(new PlayDay(this.players, playDay));
       }
-      console.log('DEBUG: ' + JSON.stringify(playDayArray));
+      //console.log('DEBUG: ' + JSON.stringify(playDayArray));
 
       this.dataSource = new PlaydayTableDataSource(
         playDayArray, this.paginator, this.sort);

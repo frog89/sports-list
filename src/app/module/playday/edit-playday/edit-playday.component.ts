@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 
 import { PlayDay } from 'src/app/model/playday.model';
@@ -8,7 +7,6 @@ import { IPlayer } from 'src/app/model/player.model';
 import { DataService } from '../../shared/data.service';
 import { MatCheckbox } from '@angular/material';
 import { slideIn } from '../../shared/animations';
-import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 export interface PlayerItem {
   id: number;
@@ -25,7 +23,7 @@ export interface PlayerItem {
 })
 export class EditPlaydayComponent implements OnInit {
   myForm: FormGroup;
-  playday: PlayDay;
+  playday: PlayDay | null;
   allPlayers: IPlayer[];
   choosablePlayers: PlayerItem[] = [];
 
@@ -67,10 +65,12 @@ export class EditPlaydayComponent implements OnInit {
   }
 
   loadPlayDay() : void {
-    let id = +this.route.snapshot.paramMap.get('id');
+    let map: ParamMap = this.route && this.route.snapshot && this.route.snapshot.paramMap || null;
+    let idString: string = map && map.get('id') || "0";
+    let id: number = +idString;
     this.dataService.getPlayDay(id).subscribe(
       pd => {
-        this.playday = pd.length == 1 ? pd[0] : null;
+        this.playday = pd.length == 1 ? new PlayDay(this.allPlayers, pd[0]) : null;
         this.initFormAfterDataLoad();
       });
   }
@@ -78,7 +78,8 @@ export class EditPlaydayComponent implements OnInit {
   valiCancelledAndCourtsAndHours(isCancelledCtrl: AbstractControl, 
       numOfHoursCtrl: AbstractControl, 
       numOfCourtsCtrl: AbstractControl) {
-    return (group: FormGroup): {[key: string]: any} => {
+    return (ctrl: AbstractControl): {[key: string]: any} | null => {
+      let group: FormGroup = ctrl as FormGroup;
       if (isCancelledCtrl.value && numOfHoursCtrl.value > 0)
         return { invalidCancelledButHoursGreaterZero: true };
       if (!isCancelledCtrl.value && numOfHoursCtrl.value <= 0)
@@ -87,11 +88,13 @@ export class EditPlaydayComponent implements OnInit {
         return { invalidCancelledButCourtsGreaterZero: true };
       if (!isCancelledCtrl.value && numOfCourtsCtrl.value <= 0)
         return { invalidNotCancelledButCourtsZero: true };
+      return null;
     }
   }
 
   valiDifferentPlayers() {
-    return (group: FormGroup): {[key: string]: any} => {
+    return (ctrl: AbstractControl): {[key: string]: any} | null => {
+      let group: FormGroup = ctrl as FormGroup;
       let values: number[] = [];
       let arr = <FormArray>group.controls.players;
       for (let ctrl of arr.controls) {
@@ -106,6 +109,7 @@ export class EditPlaydayComponent implements OnInit {
           }
         }
       }
+      return null;
     }
   }
   
@@ -125,8 +129,8 @@ export class EditPlaydayComponent implements OnInit {
         let fc:FormControl = <FormControl>arr.at(i);
         fc.setValue(this.playday.playerIds[i]);
       }
-        
-      this.myForm.controls.day.setValue(this.playday.day.toDate());
+      
+      this.myForm.controls.day.setValue(this.playday.dayAsDate);
       this.myForm.controls.isCancelled.setValue(this.playday.isCancelled);
       this.myForm.controls.numOfHours.setValue(this.playday.numOfHours);
       this.myForm.controls.numOfCourts.setValue(this.playday.numOfCourts);
@@ -135,32 +139,23 @@ export class EditPlaydayComponent implements OnInit {
     //this.myForm.valueChanges.subscribe(console.log);
   }
 
-
-  /*
-  get bar():boolean {
-    return this._bar;
-  }
-  set bar(theBar:boolean) {
-    this._bar = theBar;
-  }
-  */
    getPlayerNameById(id: number) : string {
-     var p: IPlayer = this.allPlayers == null ? null : this.allPlayers.find(p => p.id == id);
+     var p: IPlayer | undefined = this.allPlayers == null ? undefined : this.allPlayers.find(p => p.id == id);
      return this.getPlayerName(p);
    }
-   getPlayerName(p: IPlayer) : string {
+   getPlayerName(p: IPlayer | undefined) : string {
      if (p == null)
        return "?";
      return `${p.lastName}, ${p.firstName}`;
    }
 
   onSubmit() {
-    console.log("Day: " + this.myForm.value.dayControl);
-    console.log("playerControl1: " + this.myForm.value.playerControl1);
-    console.log("playerControl2: " + this.myForm.value.playerControl2);
-    console.log("playerControl3: " + this.myForm.value.playerControl3);
-    console.log("playerControl4: " + this.myForm.value.playerControl4);
-    console.log("playerControl5: " + this.myForm.value.playerControl5);
+    console.log("Day: " + this.myForm.value.day);
+    console.log("playerControl1: " + this.myForm.value.players[0]);
+    console.log("playerControl2: " + this.myForm.value.players[1]);
+    console.log("playerControl3: " + this.myForm.value.players[2]);
+    console.log("playerControl4: " + this.myForm.value.players[3]);
+    console.log("playerControl5: " + this.myForm.value.players[4]);
     console.log("isCancelled: " + this.myForm.value.isCancelled);
     console.log("numOfHours: " + this.myForm.value.numOfHours);
     console.log("numOfCourts: " + this.myForm.value.numOfCourts);

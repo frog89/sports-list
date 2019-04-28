@@ -1,9 +1,8 @@
-import { firestore } from 'firebase';
 import { IPlayer } from './player.model';
 
 export interface IPlayDay {
    id: number;
-   day: firestore.Timestamp;
+   day: string;
    playerIds: number[];
    isCancelled: boolean;
    extraPayIds: number[];
@@ -14,7 +13,7 @@ export interface IPlayDay {
 
 export class PlayDay implements IPlayDay {
   id: number;
-  day: firestore.Timestamp;
+  day: string;
   playerIds: number[];
   isCancelled: boolean;
   extraPayIds: number[];
@@ -22,26 +21,23 @@ export class PlayDay implements IPlayDay {
   numOfCourts: number;
   remark?: string;
 
-  constructor(private sortedPlayers : IPlayer[], private playDay: IPlayDay) {
+  constructor(private sortedPlayers : IPlayer[], playDay: IPlayDay) {
     Object.assign(this, playDay);
   }
 
-  hasPlayerPlayed(index: number) : boolean {
-    if (index < 0 || index > this.sortedPlayers.length - 1) {
-      return false;
-    }
+  hasPlayerPlayed(player: IPlayer) : boolean {
     for (let i: number = 0; i < this.playerIds.length; i++) {
-      if (index == this.playerIds[i]) {
+      if (player.id == this.playerIds[i]) {
         return true;
       }
     }
     return false;
   }
 
-  get dayAsDate() : Date {
-    return this.playDay.day.toDate();
+  get dayAsDate(): Date {
+    return new Date(this.day);
   }
   set dayAsDate(aDate : Date) {
-    this.playDay.day = firestore.Timestamp.fromDate(aDate);
+    this.day = Date.prototype.toJSON(aDate);
   }
 }

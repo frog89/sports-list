@@ -77,6 +77,6 @@ export class PlaydayTableDataSource extends DataSource<IPlayDay> {
 }
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */
-function compare(a, b, isAsc) {
+function compare(a: any, b: any, isAsc: boolean): number {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
