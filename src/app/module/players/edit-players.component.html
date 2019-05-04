@@ -1,7 +1,22 @@
 <div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
     class="mat-elevation-z888">
+
   <div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
     <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Players</div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="search-div">
+    <button mat-raised-button>
+      <mat-icon>add</mat-icon>Create
+    </button>
+    <mat-form-field fxFlex="0 1 60%" class="search-form-field" floatLabel="never">
+      <input matInput [(ngModel)]="searchText" placeholder="Search" autocomplete="off"
+        (keyup)="search()">
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchText"
+            (click)="onSearchClear()">
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
   </div>
 
   <mat-table fxFlex="1 0 100%" 
@@ -31,7 +46,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>Active?</mat-header-cell>
       <mat-cell *matCellDef="let row">
         <div fxLayout="row" fxLayoutAlign="center center">
-          <mat-checkbox 
+          <mat-checkbox disabled="true"
             [checked]="row.isActive">
           </mat-checkbox>
         </div>
@@ -63,14 +78,13 @@
       [ngClass]="{ 'hide': dataSource != null }">
     </mat-footer-row>
     <mat-footer-row *matFooterRowDef="['nodata']"
-      [ngClass]="{ 'hide': dataSource == null || dataSource.players.length > 0 }">
+      [ngClass]="{ 'hide': dataSource == null || dataSource.data.length > 0 }">
     </mat-footer-row>
   </mat-table>
 
-  <mat-paginator #paginator
-      [length]="dataSource == null ? 0 : dataSource.players.length"
-      [pageIndex]="0"
-      [pageSize]="50"
-      [pageSizeOptions]="[2, 25, 50, 100, 250]">
+  <mat-paginator
+    [pageSizeOptions]="[25, 50, 100, 250]"
+    [pageSize]="25"
+    showFirstLastButtons>
   </mat-paginator>
 </div>

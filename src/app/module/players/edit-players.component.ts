@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
-import { EditPlayersDataSource } from './edit-players-datasource';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DataService } from '../shared/data.service';
 import { Player, IPlayer } from 'src/app/model/player.model';
 import { slideIn } from '../shared/animations';
@@ -14,7 +13,8 @@ import { slideIn } from '../shared/animations';
 export class EditPlayersComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: EditPlayersDataSource;
+  dataSource: MatTableDataSource<Player>;
+  searchText: string;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
@@ -22,8 +22,17 @@ export class EditPlayersComponent implements AfterViewInit {
   constructor(private dataService: DataService) {
   }
 
-  playerCount(): number {
-    return this.dataSource == null ? 0 : this.dataSource.players.length;
+  onSearchClear(): void {
+    this.searchText = "";
+    this.search();
+  }
+
+  hasSubString(aProperty: string, aSearch: string): boolean {
+    return aProperty.toLowerCase().indexOf(aSearch) >= 0;
+  }
+
+  search() {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   ngAfterViewInit() {
@@ -36,7 +45,15 @@ export class EditPlayersComponent implements AfterViewInit {
         players.push(new Player(dbPlayer));
       }
 
-      this.dataSource = new EditPlayersDataSource(this.paginator, this.sort, players);
+      this.dataSource = new MatTableDataSource(players);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.filterPredicate = (p: any, filter: string) => {
+        return this.displayedColumns.some((col: string) => {
+          let prop: string = String(p[col]);
+          return col != 'actions' && prop.toLowerCase().indexOf(filter) != -1;
+        });
+      }
     });
   }
 }

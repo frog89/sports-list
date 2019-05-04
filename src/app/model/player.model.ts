@@ -8,8 +8,8 @@ export interface IPlayer {
 
 export class Player implements IPlayer {
   id: number;
-  firstName: String;
-  lastName: String;
+  firstName: string;
+  lastName: string;
   shortAlias: string;
   isActive: boolean;
 
