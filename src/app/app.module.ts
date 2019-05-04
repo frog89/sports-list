@@ -11,8 +11,9 @@ import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { AuthModule } from './module/auth/auth.module';
 import { PlaydayModule } from './module/playday/playday.module';
-import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { PlayersModule } from './module/players/players.module';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDMXN49jxDCU5ESKnT36a9Su2xxIz6XBqA",
@@ -36,13 +37,17 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     AuthModule,
     PlaydayModule,
+    PlayersModule,
     AppRoutingModule,
     MatNativeDateModule,
     MatCardModule,
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

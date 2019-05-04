@@ -1,0 +1,76 @@
+<div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="mat-elevation-z888">
+  <div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
+    <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Players</div>
+  </div>
+
+  <mat-table fxFlex="1 0 100%" 
+      [dataSource]="dataSource" 
+      matSort aria-label="Elements">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.firstName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.lastName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="shortAlias">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Short Alias</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.shortAlias}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Active?</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <mat-checkbox 
+            [checked]="row.isActive">
+          </mat-checkbox>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button color="primary"><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="6">
+        Loading data...
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="nodata">
+      <mat-footer-cell *matFooterCellDef colspan="6">
+        No data found
+      </mat-footer-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-footer-row *matFooterRowDef="['loading']"
+      [ngClass]="{ 'hide': dataSource != null }">
+    </mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['nodata']"
+      [ngClass]="{ 'hide': dataSource == null || dataSource.players.length > 0 }">
+    </mat-footer-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+      [length]="dataSource == null ? 0 : dataSource.players.length"
+      [pageIndex]="0"
+      [pageSize]="50"
+      [pageSizeOptions]="[2, 25, 50, 100, 250]">
+  </mat-paginator>
+</div>

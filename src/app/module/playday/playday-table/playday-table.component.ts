@@ -9,7 +9,7 @@ import { IPlayer, Player } from 'src/app/model/player.model';
 @Component({
   selector: 'app-playday-table',
   templateUrl: './playday-table.component.html',
-  styleUrls: ['./playday-table.component.css'],
+  styleUrls: ['./playday-table.component.scss'],
   animations: [ slideIn ]
 })
 export class PlaydayTableComponent implements OnInit {
@@ -27,10 +27,10 @@ export class PlaydayTableComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = null;
 
-    this.dataService.getPlayers().subscribe(firePlayers => {
+    this.dataService.getPlayers(false).subscribe(dbPlayers => {
       this.players.length = 0;
-      for (let i: number = 0; i < firePlayers.length; i++) {
-        let player: IPlayer = firePlayers[i];
+      for (let i: number = 0; i < dbPlayers.length; i++) {
+        let player: IPlayer = dbPlayers[i];
         let col: string = `p${i}`;
         this.displayedColumns.push(col);
         this.players.push(new Player(player));

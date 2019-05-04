@@ -57,7 +57,7 @@ export class EditPlaydayComponent implements OnInit {
 
   ngOnInit() {
     // Fetch Playday for passed id
-    this.dataService.getPlayers().subscribe(
+    this.dataService.getPlayers(false).subscribe(
       p => {
         this.allPlayers = p;
         this.loadPlayDay();

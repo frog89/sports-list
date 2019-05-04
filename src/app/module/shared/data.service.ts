@@ -4,6 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlayDay } from 'src/app/model/playday.model';
+import { QueryFn } from 'angularfire2/firestore'
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,17 @@ export class DataService {
 
   constructor(private afs: AngularFirestore) { }
 
-  getPlayers() : Observable<IPlayer[]> {
+  getPlayers(aLoadInactive: boolean) : Observable<IPlayer[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
     //return this.afs.collection<IPlayer>('/Players', ref => 
     //  ref.orderBy("lastname").orderBy("firstname")).
     //  valueChanges();
-    return this.afs.collection<IPlayer>('/Players').
-      valueChanges();
+    let queryFn: QueryFn | undefined = ref => ref.where('isActive', '==', true);
+    if (aLoadInactive) {
+      queryFn = undefined;
+    }
+    return this.afs.collection<IPlayer>('/Players', queryFn).valueChanges();
   }
 
   getPlayDays() : Observable<PlayDay[]> {
