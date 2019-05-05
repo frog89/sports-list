@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { PlaydayTableDataSource } from './playday-table-datasource';
-import { slideIn } from '../../shared/animations';
-import { DataService } from '../../shared/data.service';
-import { IPlayDay, PlayDay } from 'src/app/model/playday.model';
-import { IPlayer, Player } from 'src/app/model/player.model';
+import { slideIn } from '../../../shared/animations';
+import { DataService } from '../../../shared/data.service';
+import { IPlayDay, PlayDay } from 'src/app/shared/model/playday.model';
+import { IPlayer, Player } from 'src/app/shared/model/player.model';
+import { DocumentChangeAction } from 'angularfire2/firestore';
 
 @Component({
   selector: 'app-playday-table',
@@ -30,10 +31,10 @@ export class PlaydayTableComponent implements OnInit {
     this.dataService.getPlayers(false).subscribe(dbPlayers => {
       this.players.length = 0;
       for (let i: number = 0; i < dbPlayers.length; i++) {
-        let player: IPlayer = dbPlayers[i];
+        let player: DocumentChangeAction<IPlayer> = dbPlayers[i];
         let col: string = `p${i}`;
         this.displayedColumns.push(col);
-        this.players.push(new Player(player));
+        this.players.push(new Player(player.payload.doc.id, player.payload.doc.data()));
       }
 
       //console.log('DEBUG: ' + JSON.stringify(this.displayedColumns));

@@ -6,14 +6,14 @@
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="search-div">
-    <button mat-raised-button>
-      <mat-icon>add</mat-icon>Create
+    <button mat-raised-button (click)="onCreate()" class="app-button">
+      <mat-icon style="margin-bottom: 2px;">add</mat-icon>Create
     </button>
     <mat-form-field fxFlex="0 1 60%" class="search-form-field" floatLabel="never">
       <input matInput [(ngModel)]="searchText" placeholder="Search" autocomplete="off"
-        (keyup)="search()">
+        (keyup)="applyFilter()">
         <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchText"
-            (click)="onSearchClear()">
+            (click)="clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
@@ -56,8 +56,8 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-icon-button color="primary"><mat-icon>launch</mat-icon></button>
-        <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+        <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="onDelete(row.id)"><mat-icon>delete_outline</mat-icon></button>
       </mat-cell>  
     </ng-container>
 

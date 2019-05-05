@@ -2,8 +2,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { IPlayDay, PlayDay } from '../../../model/playday.model';
-import { DataService } from '../../shared/data.service';
+import { IPlayDay, PlayDay } from '../../../shared/model/playday.model';
+import { DataService } from '../../../shared/data.service';
 
 /**
  * Data source for the PlaydayTable view. This class should
@@ -69,7 +69,7 @@ export class PlaydayTableDataSource extends DataSource<IPlayDay> {
       switch (this.sort.active) {
         case 'day': return compare(a.day, b.day, isAsc);
         case 'remark': return compare(a.remark, b.remark, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case '$key': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
     });

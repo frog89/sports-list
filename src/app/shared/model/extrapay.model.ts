@@ -1,5 +1,5 @@
 export interface IExtraPay {
-  id: number;
+  id: string;
   playerId: number;
   amount: number;
   remark?: string;

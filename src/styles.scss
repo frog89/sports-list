@@ -26,3 +26,34 @@
 .margin-top-10px {
   margin-top: 10px;
 }
+
+.app-menu-button {
+  margin: 0px 10px;
+  padding: 0px;
+  font-weight: bold;
+  color: mat-color($app-accent);
+  background-color: mat-color($app-primary, 400);
+  display: block;
+}
+
+.app-button {
+  font-weight: bold;
+  color: mat-color($app-accent);
+  background-color: mat-color($app-primary, 400);
+  display: block;
+}
+
+snack-bar-container.success {
+  background-color: green;
+  color: #fff;
+}
+
+snack-bar-container.warn {
+  background-color: mat-color($app-warn);
+  color : #fff;
+}
+
+snack-bar-container.notification simple-snack-bar {
+  font-size: 18px !important;
+  font-weight: bold;
+}

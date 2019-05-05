@@ -1,9 +1,9 @@
 import { IPlayer } from './player.model';
 
 export interface IPlayDay {
-   id: number;
+   id: string;
    day: string;
-   playerIds: number[];
+   playerIds: string[];
    isCancelled: boolean;
    extraPayIds: number[];
    numOfHours: number;
@@ -12,9 +12,9 @@ export interface IPlayDay {
 }
 
 export class PlayDay implements IPlayDay {
-  id: number;
+  id: string;
   day: string;
-  playerIds: number[];
+  playerIds: string[];
   isCancelled: boolean;
   extraPayIds: number[];
   numOfHours: number;

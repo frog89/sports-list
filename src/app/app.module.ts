@@ -11,9 +11,11 @@ import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { AuthModule } from './module/auth/auth.module';
 import { PlaydayModule } from './module/playday/playday.module';
-import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule, ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { PlayersModule } from './module/players/players.module';
+import { PlayerModule } from './module/player/player.module';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AppErrorStateMatcher } from './shared/AppErrorStateMatcher';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDMXN49jxDCU5ESKnT36a9Su2xxIz6XBqA",
@@ -35,9 +37,10 @@ export const firebaseConfig = {
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     AuthModule,
     PlaydayModule,
-    PlayersModule,
+    PlayerModule,
     AppRoutingModule,
     MatNativeDateModule,
     MatCardModule,
@@ -49,7 +52,9 @@ export const firebaseConfig = {
     MatPaginatorModule,
     MatSortModule
   ],
-  providers: [],
+  providers: [
+    {provide: ErrorStateMatcher, useClass: AppErrorStateMatcher }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IPlayer } from '../../model/player.model';
-import { AngularFirestore } from 'angularfire2/firestore'
+import { IPlayer } from './model/player.model';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentChangeAction, DocumentReference, SetOptions } from 'angularfire2/firestore'
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { PlayDay } from 'src/app/model/playday.model';
+import { PlayDay } from 'src/app/shared/model/playday.model';
 import { QueryFn } from 'angularfire2/firestore'
 
 @Injectable({
@@ -13,7 +12,7 @@ export class DataService {
 
   constructor(private afs: AngularFirestore) { }
 
-  getPlayers(aLoadInactive: boolean) : Observable<IPlayer[]> {
+  getPlayers(aLoadInactive: boolean) : Observable<DocumentChangeAction<IPlayer>[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
     //return this.afs.collection<IPlayer>('/Players', ref => 
@@ -23,19 +22,39 @@ export class DataService {
     if (aLoadInactive) {
       queryFn = undefined;
     }
-    return this.afs.collection<IPlayer>('/Players', queryFn).valueChanges();
+    return this.afs.collection<IPlayer>('Players', queryFn).snapshotChanges();
+  }
+
+  insertPlayer(player: IPlayer): void {
+    var newId =  this.afs.createId();
+    player.id = newId;
+    let doc: AngularFirestoreDocument<IPlayer> = this.afs.collection<IPlayer>('Players').doc<IPlayer>(newId);
+    let playerObj: IPlayer = Object.assign({}, player);
+    doc.set(playerObj);
+  }
+
+  updatePlayer(player: IPlayer): void {
+    let doc: AngularFirestoreDocument<IPlayer> = this.afs.doc<IPlayer>(`Players/${player.id}`);
+    let playerObj: IPlayer = Object.assign({}, player);
+    doc.update(playerObj);
+  }
+
+  deletePlayer(aId: string): void {
+    let id: string = aId;
+    let doc: AngularFirestoreDocument<IPlayer> = this.afs.doc<IPlayer>(`Players/${id}`);
+    doc.delete();
   }
 
   getPlayDays() : Observable<PlayDay[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
-    return this.afs.collection<PlayDay>('/PlayDays').valueChanges();
+    return this.afs.collection<PlayDay>('PlayDays').valueChanges();
   }
 
   getPlayDay(aId: number) : Observable<PlayDay[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
-    return this.afs.collection<PlayDay>('/PlayDays', 
+    return this.afs.collection<PlayDay>('PlayDays', 
       ref => ref.where('id', '==', aId)).valueChanges();
   }
   

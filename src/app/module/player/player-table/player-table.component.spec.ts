@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
 
-import { EditPlayersComponent } from './edit-players.component';
+import { PlayerTableComponent } from './player-table.component';
 
-describe('EditPlayersComponent', () => {
-  let component: EditPlayersComponent;
-  let fixture: ComponentFixture<EditPlayersComponent>;
+describe('PlayerTableComponent', () => {
+  let component: PlayerTableComponent;
+  let fixture: ComponentFixture<PlayerTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditPlayersComponent ],
+      declarations: [ PlayerTableComponent ],
       imports: [
         NoopAnimationsModule,
         MatPaginatorModule,
@@ -21,7 +21,7 @@ describe('EditPlayersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditPlayersComponent);
+    fixture = TestBed.createComponent(PlayerTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

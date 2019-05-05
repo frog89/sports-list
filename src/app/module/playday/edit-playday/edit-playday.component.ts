@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 
-import { PlayDay } from 'src/app/model/playday.model';
-import { IPlayer } from 'src/app/model/player.model';
-import { DataService } from '../../shared/data.service';
+import { PlayDay } from 'src/app/shared/model/playday.model';
+import { IPlayer, Player } from 'src/app/shared/model/player.model';
+import { DataService } from '../../../shared/data.service';
 import { MatCheckbox } from '@angular/material';
-import { slideIn } from '../../shared/animations';
+import { slideIn } from '../../../shared/animations';
+import { DocumentChangeAction } from 'angularfire2/firestore';
 
 export interface PlayerItem {
-  id: number;
+  id: string;
   display: string;
 }
 
@@ -24,7 +25,7 @@ export interface PlayerItem {
 export class EditPlaydayComponent implements OnInit {
   myForm: FormGroup;
   playday: PlayDay | null;
-  allPlayers: IPlayer[];
+  allPlayers: Player[];
   choosablePlayers: PlayerItem[] = [];
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
@@ -58,8 +59,13 @@ export class EditPlaydayComponent implements OnInit {
   ngOnInit() {
     // Fetch Playday for passed id
     this.dataService.getPlayers(false).subscribe(
-      p => {
-        this.allPlayers = p;
+      dbPlayers => {
+        this.allPlayers.length = 0;
+        for (let i: number = 0; i < dbPlayers.length; i++) {
+          let player: DocumentChangeAction<IPlayer> = dbPlayers[i];
+          this.allPlayers.push(new Player(player.payload.doc.id, player.payload.doc.data()));
+        }
+        
         this.loadPlayDay();
       } );
   }
@@ -139,7 +145,7 @@ export class EditPlaydayComponent implements OnInit {
     //this.myForm.valueChanges.subscribe(console.log);
   }
 
-   getPlayerNameById(id: number) : string {
+   getPlayerNameById(id: string) : string {
      var p: IPlayer | undefined = this.allPlayers == null ? undefined : this.allPlayers.find(p => p.id == id);
      return this.getPlayerName(p);
    }

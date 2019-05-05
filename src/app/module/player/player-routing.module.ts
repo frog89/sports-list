@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EditPlayersComponent } from './edit-players.component';
+import { PlayerTableComponent } from './player-table/player-table.component';
 
 const routes: Routes = [
-  { path: "edit-players", component: EditPlayersComponent },
+  { path: "player-table", component: PlayerTableComponent },
 ];
 
 @NgModule({

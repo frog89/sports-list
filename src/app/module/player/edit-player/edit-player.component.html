@@ -1,0 +1,43 @@
+<div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="mat-elevation-z888">
+
+<div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
+  <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Edit Player</div>
+</div>
+
+<form [formGroup]="form" class="normal-form" 
+    (submit)="onSubmit()">
+  <div fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div fxLayout="row" fxLayoutAlign="start" style="margin-bottom: 5px;">ID:
+      <input fxFlex.gt-xs="1 1 400px" fxFlex="1 1 90%" formControlName="id" 
+        style="margin-left: 10px;">
+    </div>
+    <mat-form-field>
+      <input formControlName="firstName" matInput placeholder="First Name*">
+      <mat-error>This field is mandatory!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input formControlName="lastName" matInput placeholder="Last Name*">
+      <mat-error>This field is mandatory!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input formControlName="shortAlias" matInput placeholder="Short Alias*">
+      <mat-error *ngIf="form.controls['shortAlias'].errors?.required">This field is mandatory!</mat-error>
+      <mat-error *ngIf="form.controls['shortAlias'].errors?.maxlength">Max. 10 characters!</mat-error>
+    </mat-form-field>
+    <div style="margin-bottom: 15px;">
+      <mat-checkbox formControlName="isActive">Active?</mat-checkbox>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="form.invalid"
+        style="margin: 5px;">Submit</button>
+      <button mat-raised-button color="warn"
+        (click)="onClearForm()"
+        style="margin: 5px;"
+        *ngIf="mode == Mode.Insert">Clear</button>
+    </div>
+  </div>
+</form>
+
+</div>

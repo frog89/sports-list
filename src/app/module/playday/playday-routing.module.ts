@@ -4,8 +4,8 @@ import { PlaydayListComponent } from './playday-list.component';
 import { EditPlaydayComponent } from './edit-playday/edit-playday.component';
 
 const routes: Routes = [
-   { path: "playdays", component: PlaydayListComponent },
-   { path: "playdays/:id", component: EditPlaydayComponent }
+   { path: "playday-table", component: PlaydayListComponent },
+   { path: "playday-table/:id", component: EditPlaydayComponent }
 ];
 
 @NgModule({
