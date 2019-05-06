@@ -11,7 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { AuthModule } from './module/auth/auth.module';
 import { PlaydayModule } from './module/playday/playday.module';
-import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule, ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material';
+import { MatNativeDateModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule, ErrorStateMatcher } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PlayerModule } from './module/player/player.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -55,6 +55,7 @@ export const firebaseConfig = {
   providers: [
     {provide: ErrorStateMatcher, useClass: AppErrorStateMatcher }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent
+  ]
 })
 export class AppModule { }

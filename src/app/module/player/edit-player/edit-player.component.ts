@@ -67,10 +67,10 @@ export class EditPlayerComponent implements OnInit {
       let msg: string = "";
       if (this.mode == Mode.Insert) {
         this.dataService.insertPlayer(this.player);
-        msg = 'Inserted successfully!'
+        msg = 'Inserted successfully !'
       } else {
         this.dataService.updatePlayer(this.player);
-        msg = 'Updated successfully!'
+        msg = 'Updated successfully !'
       }
 
       this.notificationService.success(msg);

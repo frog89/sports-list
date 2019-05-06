@@ -12,3 +12,12 @@
   font-family: Arial, Helvetica, sans-serif;
   padding: 20px 5px;
 }
+
+.app-menu-button {
+  margin: 0px 10px;
+  padding: 0px;
+  font-weight: bold;
+  color: mat-color($app-accent);
+  background-color: mat-color($app-primary, 400);
+  display: block;
+}

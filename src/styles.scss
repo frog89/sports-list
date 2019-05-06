@@ -23,17 +23,16 @@
   font-size: 20px;
 }
 
-.margin-top-10px {
-  margin-top: 10px;
+.padding0px .mat-dialog-container {
+  padding: 0px;
 }
 
-.app-menu-button {
-  margin: 0px 10px;
-  padding: 0px;
-  font-weight: bold;
-  color: mat-color($app-accent);
-  background-color: mat-color($app-primary, 400);
-  display: block;
+.margin0px {
+  margin: 0px;
+}
+
+.margintop10px {
+  margin-top: 10px;
 }
 
 .app-button {

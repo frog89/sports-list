@@ -6,6 +6,7 @@ import { slideIn } from '../../../shared/animations';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { NotificationService } from '../../../shared/notification.service';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-player-table',
@@ -23,7 +24,9 @@ export class PlayerTableComponent implements AfterViewInit {
   displayedColumns = ['id', 'firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
 
   constructor(private dataService: DataService, 
-    private notificationService: NotificationService, private dialog: MatDialog) {
+    private notificationService: NotificationService, 
+    private dialog: MatDialog,
+    private dialogService: DialogService) {
   }
 
   getPopupDialogConfig(aData?: Player): MatDialogConfig {
@@ -58,8 +61,13 @@ export class PlayerTableComponent implements AfterViewInit {
   }
 
   onDelete(aId: string){
-    this.dataService.deletePlayer(aId);
-    this.notificationService.warn('! Deleted successfully');
+    this.dialogService.openConfirmDialog("Are you sure to delete this record ?")
+      .afterClosed().subscribe(res => {
+        if (res) {
+          this.dataService.deletePlayer(aId);
+          this.notificationService.warn('Deleted successfully !');  
+        }
+      });
   }
 
   ngAfterViewInit() {
