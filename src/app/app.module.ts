@@ -18,12 +18,13 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AppErrorStateMatcher } from './shared/AppErrorStateMatcher';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyDMXN49jxDCU5ESKnT36a9Su2xxIz6XBqA",
-  authDomain: "first-firebase-app-8ea15.firebaseapp.com",
-  databaseURL: "https://first-firebase-app-8ea15.firebaseio.com",
-  projectId: "first-firebase-app-8ea15",
-  storageBucket: "first-firebase-app-8ea15.appspot.com",
-  messagingSenderId: "1026345654437"
+  apiKey: "AIzaSyBBtbLqRZe4mGglvBh-p5oPQDLoxZmfyRQ",
+  authDomain: "sportslist-286a6.firebaseapp.com",
+  databaseURL: "https://sportslist-286a6.firebaseio.com",
+  projectId: "sportslist-286a6",
+  storageBucket: "sportslist-286a6.appspot.com",
+  messagingSenderId: "289104708528",
+  appId: "1:289104708528:web:593794d7c71e35e6"
 };
 
 @NgModule({

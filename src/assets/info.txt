@@ -1,0 +1,76 @@
+Firebase Hosting:
+=================
+Kopieren Sie diese Skripts (ohne {code}) und fügen Sie sie am unteren Ende des Tags <body> ein. 
+Beachten Sie jedoch folgendes, bevor Sie Firebase-Dienste verwenden:
+
+{code}
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="/__/firebase/5.11.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#reserved-urls -->
+
+<!-- Initialize Firebase -->
+<script src="/__/firebase/init.js"></script>
+{code}
+
+Weitere Infos:
+https://firebase.google.com/docs/web/setup?authuser=0
+https://firebase.google.com/docs/reference/js/?authuser=0
+https://firebase.google.com/docs/samples/?authuser=0
+
+**************************************************************************
+
+Firebase CLI installieren:
+==========================
+Führen Sie den folgenden npm-Befehl aus, um die Kommandozeile zu installieren oder auf 
+die neueste Version zu aktualisieren:
+> npm install -g firebase-tools
+
+Weitere Infos:
+https://firebase.google.com/docs/cli/?authuser=0
+https://docs.npmjs.com/getting-started/fixing-npm-permissions
+
+**************************************************************************
+
+In Firebase Hosting bereitstellen:
+==================================
+Sie können sie jetzt oder später (https://firebase.google.com/docs/hosting/quickstart?authuser=0)
+bereitstellen. Öffnen Sie zum Bereitstellen ein Terminalfenster und rufen Sie dann Ihre Web-App 
+auf oder erstellen Sie ein Stammverzeichnis dafür.
+
+In Google anmelden
+------------------
+> firebase login
+
+Ihr Projekt initiieren
+----------------------
+Im Stammverzeichnis Ihrer App:
+> firebase init
+
+Specify your site in firebase.json
+----------------------------------
+Add your site name to the firebase.json (https://firebase.google.com/docs/cli?authuser=0#the_firebasejson_file)
+configuration file. After you get set up, see the best practices for multi-site deployment:
+https://firebase.google.com/docs/hosting/multisites?authuser=0#set_up_deploy_targets
+
+{
+  "hosting": {
+    "site": "sports-list42",
+    "public": "public"
+    ...
+  }
+}
+
+Web-App bereitstellen, wenn Sie soweit sind
+-------------------------------------------
+Legen Sie die statischen Dateien (z. B. HTML, CSS, JS) im Bereitstellungsverzeichnis Ihrer 
+App ab (Standard ist "öffentlich"). Führen Sie anschließend diesen Befehl aus dem 
+Stammverzeichnis der App aus:
+> firebase deploy --only hosting:sports-list42
+
+Nach der Bereitstellung können Sie Ihre App über sports-list42.firebaseapp.com anzeigen lassen:
+https://sports-list42.firebaseapp.com/
+
+Need help? Check out the Hosting docs:
+https://firebase.google.com/docs/web/setup?authuser=0
