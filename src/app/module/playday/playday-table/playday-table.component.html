@@ -14,7 +14,7 @@
     <ng-container matColumnDef="day">
       <mat-header-cell *matHeaderCellDef mat-sort-header id="dayHeader" class="xyz">Day</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <a  [routerLink]="['/playdays',row.id]">{{row.dayAsDate | date:'yyyy-MM-dd' }}</a>
+        <a  [routerLink]="['/edit-playday',row.id]">{{row.dayAsDate | date:'yyyy-MM-dd' }}</a>
       </mat-cell>
     </ng-container>
 

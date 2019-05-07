@@ -25,7 +25,7 @@ export interface PlayerItem {
 export class EditPlaydayComponent implements OnInit {
   myForm: FormGroup;
   playday: PlayDay | null;
-  allPlayers: Player[];
+  allPlayers: Player[] = [];
   choosablePlayers: PlayerItem[] = [];
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
@@ -65,7 +65,9 @@ export class EditPlaydayComponent implements OnInit {
           let player: DocumentChangeAction<IPlayer> = dbPlayers[i];
           this.allPlayers.push(new Player(player.payload.doc.id, player.payload.doc.data()));
         }
-        
+
+        //console.log('DEBUG: ' + JSON.stringify(this.allPlayers));
+
         this.loadPlayDay();
       } );
   }
@@ -73,8 +75,7 @@ export class EditPlaydayComponent implements OnInit {
   loadPlayDay() : void {
     let map: ParamMap = this.route && this.route.snapshot && this.route.snapshot.paramMap || null;
     let idString: string = map && map.get('id') || "0";
-    let id: number = +idString;
-    this.dataService.getPlayDay(id).subscribe(
+    this.dataService.getPlayDay(idString).subscribe(
       pd => {
         this.playday = pd.length == 1 ? new PlayDay(this.allPlayers, pd[0]) : null;
         this.initFormAfterDataLoad();

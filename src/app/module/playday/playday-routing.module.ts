@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PlaydayListComponent } from './playday-list.component';
 import { EditPlaydayComponent } from './edit-playday/edit-playday.component';
+import { PlaydayTableComponent } from './playday-table/playday-table.component';
 
 const routes: Routes = [
-   { path: "playday-table", component: PlaydayListComponent },
-   { path: "playday-table/:id", component: EditPlaydayComponent }
+   { path: "playday-table", component: PlaydayTableComponent },
+   { path: "edit-playday/:id", component: EditPlaydayComponent }
 ];
 
 @NgModule({

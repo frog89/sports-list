@@ -51,7 +51,7 @@ export class DataService {
     return this.afs.collection<PlayDay>('PlayDays').valueChanges();
   }
 
-  getPlayDay(aId: number) : Observable<PlayDay[]> {
+  getPlayDay(aId: string) : Observable<PlayDay[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
     return this.afs.collection<PlayDay>('PlayDays', 
