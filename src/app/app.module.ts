@@ -16,6 +16,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { PlayerModule } from './module/player/player.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AppErrorStateMatcher } from './shared/AppErrorStateMatcher';
+import { SaisonModule } from './module/saison/saison.module';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBBtbLqRZe4mGglvBh-p5oPQDLoxZmfyRQ",
@@ -42,6 +43,7 @@ export const firebaseConfig = {
     AuthModule,
     PlaydayModule,
     PlayerModule,
+    SaisonModule,
     AppRoutingModule,
     MatNativeDateModule,
     MatCardModule,

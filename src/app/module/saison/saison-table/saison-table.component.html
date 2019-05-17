@@ -1,0 +1,83 @@
+<div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="mat-elevation-z888">
+
+  <div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
+    <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Saisons</div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="search-div">
+    <button mat-raised-button (click)="onCreate()" class="app-button">
+      <mat-icon style="margin-bottom: 2px;">add</mat-icon>Create
+    </button>
+    <mat-form-field fxFlex="0 1 60%" class="search-form-field" floatLabel="never">
+      <input matInput [(ngModel)]="searchText" placeholder="Search" autocomplete="off"
+        (keyup)="applyFilter()">
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchText"
+            (click)="clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+  </div>
+
+  <mat-table fxFlex="1 0 100%" 
+      [dataSource]="dataSource" 
+      matSort aria-label="Elements">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dayFrom">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Start Day</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{row.dayFromAsDate | date:'yyyy-MM-dd' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dayTo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>End Day</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{row.dayToAsDate | date:'yyyy-MM-dd' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="onDelete(row.id)"><mat-icon>delete_outline</mat-icon></button>
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="5">
+        Loading data...
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="nodata">
+      <mat-footer-cell *matFooterCellDef colspan="5">
+        No data found
+      </mat-footer-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-footer-row *matFooterRowDef="['loading']"
+      [ngClass]="{ 'hide': dataSource != null }">
+    </mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['nodata']"
+      [ngClass]="{ 'hide': dataSource == null || dataSource.data.length > 0 }">
+    </mat-footer-row>
+  </mat-table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5]"
+    [pageSize]="5"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

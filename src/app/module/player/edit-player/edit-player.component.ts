@@ -1,15 +1,11 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DataService } from '../../../shared/data.service';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Player } from 'src/app/shared/model/player.model';
 import { slideIn } from '../../../shared/animations';
 import { NotificationService } from '../../../shared/notification.service';
-
-export enum Mode {
-  Insert,
-  Update
-}
+import { UpdateMode } from 'src/app/shared/model/update-mode-type';
+import { PlayerDataService } from 'src/app/shared/player-data.service';
 
 @Component({
   selector: 'app-edit-player',
@@ -18,18 +14,18 @@ export enum Mode {
   animations: [ slideIn ]
 })
 export class EditPlayerComponent implements OnInit {
-  private form: FormGroup;
-  Mode = Mode;
-  private mode: Mode;
+  MyUpdateMode = UpdateMode;
+  private myForm: FormGroup;
+  private myMode: UpdateMode;
 
-  constructor(private dataService: DataService, 
+  constructor(private playerDataService: PlayerDataService, 
       private dialogRef: MatDialogRef<EditPlayerComponent>,
       @Inject(MAT_DIALOG_DATA) public player: Player,
       private notificationService: NotificationService,
       ) {
     //console.log('DEBUG: ' + JSON.stringify(this.player));
-    this.mode = player.id.length == 0 ? Mode.Insert : Mode.Update;
-    this.form = new FormGroup({
+    this.myMode = player.id.length == 0 ? UpdateMode.Insert : UpdateMode.Update;
+    this.myForm = new FormGroup({
       id: new FormControl({value: null, disabled: true}),
       firstName: new FormControl("", Validators.required),
       lastName: new FormControl("", Validators.required),
@@ -40,7 +36,7 @@ export class EditPlayerComponent implements OnInit {
   }
 
   setFormWithPlayer() {
-    this.form.setValue({
+    this.myForm.setValue({
       id: this.player.id,
       firstName: this.player.firstName,
       lastName: this.player.lastName,
@@ -50,26 +46,26 @@ export class EditPlayerComponent implements OnInit {
   }
 
   setPlayerWithForm() {
-    this.player.id = this.form.controls.id.value;
-    this.player.firstName = this.form.controls.firstName.value;
-    this.player.lastName = this.form.controls.lastName.value;
-    this.player.shortAlias = this.form.controls.shortAlias.value;
-    this.player.isActive = this.form.controls.isActive.value;
+    this.player.id = this.myForm.controls.id.value;
+    this.player.firstName = this.myForm.controls.firstName.value;
+    this.player.lastName = this.myForm.controls.lastName.value;
+    this.player.shortAlias = this.myForm.controls.shortAlias.value;
+    this.player.isActive = this.myForm.controls.isActive.value;
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    if (this.form.valid) {
+    if (this.myForm.valid) {
       this.setPlayerWithForm();
 
       let msg: string = "";
-      if (this.mode == Mode.Insert) {
-        this.dataService.insertPlayer(this.player);
+      if (this.myMode == UpdateMode.Insert) {
+        this.playerDataService.insert(this.player);
         msg = 'Inserted successfully !'
       } else {
-        this.dataService.updatePlayer(this.player);
+        this.playerDataService.update(this.player);
         msg = 'Updated successfully !'
       }
 
@@ -79,10 +75,14 @@ export class EditPlayerComponent implements OnInit {
     }
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
   onClearForm(): void {
-    if (this.mode == Mode.Update)
+    if (this.myMode == UpdateMode.Update)
       throw new Error("Clear form is allowed in insert mode only!");
-    this.form.reset();
+    this.myForm.reset();
     this.player.clear();
     this.setFormWithPlayer();
   }

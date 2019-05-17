@@ -12,39 +12,6 @@ export class DataService {
 
   constructor(private afs: AngularFirestore) { }
 
-  getPlayers(aLoadInactive: boolean) : Observable<DocumentChangeAction<IPlayer>[]> {
-    //return this.afs.collection<Player>('player', 
-    //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));
-    //return this.afs.collection<IPlayer>('/Players', ref => 
-    //  ref.orderBy("lastname").orderBy("firstname")).
-    //  valueChanges();
-    let queryFn: QueryFn | undefined = ref => ref.where('isActive', '==', true);
-    if (aLoadInactive) {
-      queryFn = undefined;
-    }
-    return this.afs.collection<IPlayer>('Players', queryFn).snapshotChanges();
-  }
-
-  insertPlayer(player: IPlayer): void {
-    var newId =  this.afs.createId();
-    player.id = newId;
-    let doc: AngularFirestoreDocument<IPlayer> = this.afs.collection<IPlayer>('Players').doc<IPlayer>(newId);
-    let playerObj: IPlayer = Object.assign({}, player);
-    doc.set(playerObj);
-  }
-
-  updatePlayer(player: IPlayer): void {
-    let doc: AngularFirestoreDocument<IPlayer> = this.afs.doc<IPlayer>(`Players/${player.id}`);
-    let playerObj: IPlayer = Object.assign({}, player);
-    doc.update(playerObj);
-  }
-
-  deletePlayer(aId: string): void {
-    let id: string = aId;
-    let doc: AngularFirestoreDocument<IPlayer> = this.afs.doc<IPlayer>(`Players/${id}`);
-    doc.delete();
-  }
-
   getPlayDays() : Observable<PlayDay[]> {
     //return this.afs.collection<Player>('player', 
     //  ref => ref.where('title', '>', 'A').where('title', '<', 'C'));

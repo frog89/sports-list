@@ -8,6 +8,7 @@ import { DataService } from '../../../shared/data.service';
 import { MatCheckbox } from '@angular/material';
 import { slideIn } from '../../../shared/animations';
 import { DocumentChangeAction } from 'angularfire2/firestore';
+import { PlayerDataService } from 'src/app/shared/player-data.service';
 
 export interface PlayerItem {
   id: string;
@@ -29,7 +30,8 @@ export class EditPlaydayComponent implements OnInit {
   choosablePlayers: PlayerItem[] = [];
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
-      private dataService: DataService) { 
+      private playdayDataService: DataService,
+      private playerDataService: PlayerDataService) { 
     this.myForm = this.fb.group( {
       day: [null, Validators.compose([Validators.required])],
       isCancelled: [],
@@ -58,7 +60,7 @@ export class EditPlaydayComponent implements OnInit {
 
   ngOnInit() {
     // Fetch Playday for passed id
-    this.dataService.getPlayers(false).subscribe(
+    this.playerDataService.getList(false).subscribe(
       dbPlayers => {
         this.allPlayers.length = 0;
         for (let i: number = 0; i < dbPlayers.length; i++) {
@@ -75,7 +77,7 @@ export class EditPlaydayComponent implements OnInit {
   loadPlayDay() : void {
     let map: ParamMap = this.route && this.route.snapshot && this.route.snapshot.paramMap || null;
     let idString: string = map && map.get('id') || "0";
-    this.dataService.getPlayDay(idString).subscribe(
+    this.playdayDataService.getPlayDay(idString).subscribe(
       pd => {
         this.playday = pd.length == 1 ? new PlayDay(this.allPlayers, pd[0]) : null;
         this.initFormAfterDataLoad();

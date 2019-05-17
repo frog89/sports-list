@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PlayersRoutingModule } from './player-routing.module';
-import { PlayerTableComponent } from './player-table/player-table.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatToolbarModule } from '@angular/material';
+import { SaisonRoutingModule } from './saison-routing.module';
+import { EditSaisonComponent } from './edit-saison/edit-saison.component';
+import { SaisonTableComponent } from './saison-table/saison-table.component';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatDatepickerModule, MatToolbarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { EditPlayerComponent } from './edit-player/edit-player.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    PlayerTableComponent,
-    EditPlayerComponent
+    EditSaisonComponent, 
+    SaisonTableComponent
   ],
   imports: [
     CommonModule,
-    PlayersRoutingModule,
+    SaisonRoutingModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -32,11 +32,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatFormFieldModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
+    MatDatepickerModule,
     MatToolbarModule,
     SharedModule
   ],
   entryComponents: [
-    EditPlayerComponent
+    EditSaisonComponent
   ]
 })
-export class PlayerModule { }
+export class SaisonModule { }

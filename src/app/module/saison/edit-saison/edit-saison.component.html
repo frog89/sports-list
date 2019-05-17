@@ -3,7 +3,7 @@
 
 <mat-toolbar>
   <span class="page-header margin-top-10px">
-    {{myMode == MyUpdateMode.Update?"Modify Player":"New Player"}}
+    {{myMode == MyUpdateMode.Update?"Modify Saison":"New Saison"}}
   </span>
   <span class="fill-remaining-space"></span>
   <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">
@@ -11,8 +11,7 @@
   </button>
 </mat-toolbar>
 
-<form [formGroup]="myForm" class="normal-form" 
-    (submit)="onSubmit()">
+<form [formGroup]="myForm" class="normal-form" (submit)="onSubmit()">
   <div fxLayout="column" fxLayoutAlign="space-between stretch">
     <div *ngIf="myMode == MyUpdateMode.Update" 
         fxLayout="row" fxLayoutAlign="start" style="margin-bottom: 5px;">ID:
@@ -20,21 +19,34 @@
         style="margin-left: 10px;">
     </div>
     <mat-form-field>
-      <input formControlName="firstName" matInput placeholder="First Name*">
+      <input formControlName="name" matInput placeholder="Name*">
       <mat-error>This field is mandatory!</mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input formControlName="lastName" matInput placeholder="Last Name*">
-      <mat-error>This field is mandatory!</mat-error>
+
+    <mat-form-field appearance="outline" color="gray" style="width: 150px;">
+      <input matInput
+        [matDatepicker]="picker1"
+        formControlName="dayFrom"
+        placeholder="Enter a start day" />
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <mat-error *ngIf="myForm.controls.dayFrom.hasError('required')">
+        Start Day is required!
+      </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input formControlName="shortAlias" matInput placeholder="Short Alias*">
-      <mat-error *ngIf="myForm.controls['shortAlias'].errors?.required">This field is mandatory!</mat-error>
-      <mat-error *ngIf="myForm.controls['shortAlias'].errors?.maxlength">Max. 10 characters!</mat-error>
+
+    <mat-form-field appearance="outline" color="gray" style="width: 150px;">
+      <input matInput
+        [matDatepicker]="picker2"
+        formControlName="dayTo"
+        placeholder="Enter an end day" />
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-error *ngIf="myForm.controls.dayTo.hasError('required')">
+        End Day is required!
+      </mat-error>
     </mat-form-field>
-    <div style="margin-bottom: 15px;">
-      <mat-checkbox formControlName="isActive">Active?</mat-checkbox>
-    </div>
+
     <div fxLayout="row wrap" fxLayoutAlign="start center">
       <button mat-raised-button color="primary" type="submit"
         [disabled]="myForm.invalid"

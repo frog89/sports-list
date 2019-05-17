@@ -1,49 +1,49 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
-import { Player, IPlayer } from 'src/app/shared/model/player.model';
 import { slideIn } from '../../../shared/animations';
-import { EditPlayerComponent } from '../edit-player/edit-player.component';
+import { EditSaisonComponent } from '../edit-saison/edit-saison.component';
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { NotificationService } from '../../../shared/notification.service';
 import { DialogService } from 'src/app/shared/dialog.service';
-import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { Saison, ISaison } from 'src/app/shared/model/saison.model';
+import { SaisonDataService } from 'src/app/shared/saison-data.service';
 
 @Component({
-  selector: 'app-player-table',
-  templateUrl: './player-table.component.html',
-  styleUrls: ['./player-table.component.scss'],
+  selector: 'app-saison-table',
+  templateUrl: './saison-table.component.html',
+  styleUrls: ['./saison-table.component.scss'],
   animations: [ slideIn ]
 })
-export class PlayerTableComponent implements AfterViewInit {
+export class SaisonTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<Player>;
+  dataSource: MatTableDataSource<Saison>;
   searchText: string;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
+  displayedColumns = ['id', 'name', 'dayFrom', 'dayTo', 'actions'];
 
-  constructor(private playerDataService: PlayerDataService, 
+  constructor(private saisonDataService: SaisonDataService, 
     private notificationService: NotificationService, 
     private dialog: MatDialog,
     private dialogService: DialogService) {
   }
 
-  getPopupDialogConfig(aData?: Player): MatDialogConfig {
+  getPopupDialogConfig(aData?: Saison): MatDialogConfig {
     let dialogConfig: MatDialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "95%";
     dialogConfig.maxWidth = "95%";
     if (aData == undefined) {
-      aData = new Player();
+      aData = new Saison();
     }
     dialogConfig.data = aData;
     return dialogConfig;
   }
 
   onCreate() {
-    this.dialog.open(EditPlayerComponent, this.getPopupDialogConfig());
+    this.dialog.open(EditSaisonComponent, this.getPopupDialogConfig());
   }
 
   clearFilter(): void {
@@ -55,32 +55,32 @@ export class PlayerTableComponent implements AfterViewInit {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
-  onEdit(aPlayer: Player) {
-    //console.log('DEBUG: ' + JSON.stringify(aPlayer));
-    this.dialog.open(EditPlayerComponent, this.getPopupDialogConfig(aPlayer));
+  onEdit(aSaison: Saison) {
+    //console.log('DEBUG: ' + JSON.stringify(aSaison));
+    this.dialog.open(EditSaisonComponent, this.getPopupDialogConfig(aSaison));
   }
 
   onDelete(aId: string){
     this.dialogService.openConfirmDialog("Are you sure to delete this record ?")
       .afterClosed().subscribe(res => {
         if (res) {
-          this.playerDataService.delete(aId);
+          this.saisonDataService.delete(aId);
           this.notificationService.warn('Deleted successfully !');  
         }
       });
   }
 
   ngAfterViewInit() {
-    let players: Player[] = [];
+    let saisons: Saison[] = [];
 
-    this.playerDataService.getList(true).subscribe(dbPlayers => {
-      players.length = 0;
-      for (let i: number = 0; i < dbPlayers.length; i++) {
-        let dbPlayer: DocumentChangeAction<IPlayer> = dbPlayers[i];
-        players.push(new Player(dbPlayer.payload.doc.id, dbPlayer.payload.doc.data()));
+    this.saisonDataService.getList().subscribe(dbSaisons => {
+      saisons.length = 0;
+      for (let i: number = 0; i < dbSaisons.length; i++) {
+        let dbSaison: DocumentChangeAction<ISaison> = dbSaisons[i];
+        saisons.push(new Saison(dbSaison.payload.doc.id, dbSaison.payload.doc.data()));
       }
 
-      this.dataSource = new MatTableDataSource(players);
+      this.dataSource = new MatTableDataSource(saisons);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filterPredicate = (p: any, filter: string) => {
