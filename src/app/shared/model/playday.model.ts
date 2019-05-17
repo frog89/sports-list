@@ -4,6 +4,7 @@ export interface IPlayDay {
    id: string;
    day: string;
    playerIds: string[];
+   saisonId: string;
    isCancelled: boolean;
    extraPayIds: number[];
    numOfHours: number;
@@ -15,14 +16,35 @@ export class PlayDay implements IPlayDay {
   id: string;
   day: string;
   playerIds: string[];
+  saisonId: string;
   isCancelled: boolean;
   extraPayIds: number[];
   numOfHours: number;
   numOfCourts: number;
   remark?: string;
 
-  constructor(private sortedPlayers : IPlayer[], playDay: IPlayDay) {
-    Object.assign(this, playDay);
+  constructor(aId?: string, aPlayDay?: IPlayDay) {
+    if (aId == undefined && aPlayDay != undefined ||
+        aId != undefined && aPlayDay == undefined) {
+      throw new Error("PlayDay constructor: Params aId and aPlayDay need to be both undefined or both filled!");
+    }
+    this.clear();
+    if (aId != undefined) {
+      Object.assign(this, aPlayDay);
+      this.id = <string>aId;
+    }
+  }
+
+  clear(): void {
+    this.id = "";
+    this.day = "";
+    this.playerIds = [];
+    this.saisonId = "";
+    this.isCancelled = false;
+    this.extraPayIds = [];
+    this.numOfHours = 1;
+    this.numOfCourts = 1;
+    this.remark = "";
   }
 
   hasPlayerPlayed(player: IPlayer) : boolean {
@@ -38,6 +60,6 @@ export class PlayDay implements IPlayDay {
     return new Date(this.day);
   }
   set dayAsDate(aDate : Date) {
-    this.day = Date.prototype.toJSON(aDate);
+    this.day = aDate.toISOString();
   }
 }

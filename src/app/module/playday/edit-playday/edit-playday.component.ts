@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 
 import { PlayDay } from 'src/app/shared/model/playday.model';
 import { IPlayer, Player } from 'src/app/shared/model/player.model';
-import { DataService } from '../../../shared/data.service';
-import { MatCheckbox } from '@angular/material';
+import { PlaydayDataService } from '../../../shared/playday-data.service';
+import { MatCheckbox, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { slideIn } from '../../../shared/animations';
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { UpdateMode } from 'src/app/shared/model/update-mode-type';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 export interface PlayerItem {
   id: string;
@@ -19,24 +21,31 @@ export interface PlayerItem {
   selector: 'app-edit-playday',
   templateUrl: './edit-playday.component.html',
   styleUrls: ['./edit-playday.component.scss'],
-  animations: [
-    slideIn
-  ]
+  animations: [ slideIn ]
 })
-export class EditPlaydayComponent implements OnInit {
+export class EditPlaydayComponent {
+  MyUpdateMode = UpdateMode;
+
   myForm: FormGroup;
-  playday: PlayDay | null;
-  allPlayers: Player[] = [];
-  choosablePlayers: PlayerItem[] = [];
+  myAllPlayers: Player[] = [];
+  myChoosablePlayers: PlayerItem[] = [];
+  myMode: UpdateMode;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
-      private playdayDataService: DataService,
-      private playerDataService: PlayerDataService) { 
+      private playdayDataService: PlaydayDataService,
+      private playerDataService: PlayerDataService,
+      private dialogRef: MatDialogRef<EditPlaydayComponent>,
+      @Inject(MAT_DIALOG_DATA) public playday: PlayDay,
+      private notificationService: NotificationService) { 
+    this.myMode = playday.id.length == 0 ? UpdateMode.Insert : UpdateMode.Update;
     this.myForm = this.fb.group( {
+      id: new FormControl({value: null, disabled: true}),
       day: [null, Validators.compose([Validators.required])],
-      isCancelled: [],
-      numOfHours: [],
-      numOfCourts: []
+      saisonId: new FormControl({value: null, disabled: true}),
+      isCancelled: false,
+      numOfHours: 1,
+      numOfCourts: 1,
+      remark: ""
     });
     this.myForm.addControl("players", new FormArray([]));    
 
@@ -46,42 +55,56 @@ export class EditPlaydayComponent implements OnInit {
         this.myForm.controls.isCancelled,
         this.myForm.controls.numOfHours,
         this.myForm.controls.numOfCourts)]);
+
+    this.loadPlayers();
   }
 
-  onCancelClicked(cb: MatCheckbox) {
-    if (cb.checked) {
-      this.myForm.controls.numOfHours.setValue(1);
-      this.myForm.controls.numOfCourts.setValue(1);
-    } else {
-      this.myForm.controls.numOfHours.setValue(0);
-      this.myForm.controls.numOfCourts.setValue(0);
+  setFormWithPlayDay() {
+    this.myForm.controls.id.setValue(this.playday.id);
+    this.myForm.controls.day.setValue(this.playday.dayAsDate);
+    this.myForm.controls.saisonId.setValue(this.playday.saisonId);
+    this.myForm.controls.isCancelled.setValue(this.playday.isCancelled);
+    this.myForm.controls.numOfHours.setValue(this.playday.numOfHours);
+    this.myForm.controls.numOfCourts.setValue(this.playday.numOfCourts);
+    this.myForm.controls.remark.setValue(this.playday.remark);
+
+    let formArray: FormArray = this.myForm.controls.players as FormArray;
+    for (let i: number = 0; i < this.playday.playerIds.length; i++) {
+      let id: string = this.playday.playerIds[i];
+      let control: AbstractControl = formArray.at(i);
+      control.setValue(id);
     }
   }
 
-  ngOnInit() {
+  setPlayDayWithForm() {
+    this.playday.dayAsDate = this.myForm.controls.day.value;
+    this.playday.isCancelled = this.myForm.controls.isCancelled.value;
+    this.playday.numOfHours = this.myForm.controls.numOfHours.value;
+    this.playday.numOfCourts = this.myForm.controls.numOfCourts.value;
+    this.playday.remark = this.myForm.controls.remark.value;
+
+    this.playday.playerIds.length = 0;
+    let formArray: FormArray = this.myForm.controls.players as FormArray;
+    for (let i: number = 0; i < formArray.length; i++) {
+      let control: FormControl = formArray.at(i) as FormControl;
+      let formPlayerId: string = control.value;
+      if (formPlayerId != null && formPlayerId.length > 0) {
+        this.playday.playerIds.push(control.value);
+      }
+    }
+  }
+
+  loadPlayers() {
     // Fetch Playday for passed id
     this.playerDataService.getList(false).subscribe(
       dbPlayers => {
-        this.allPlayers.length = 0;
+        this.myAllPlayers.length = 0;
         for (let i: number = 0; i < dbPlayers.length; i++) {
           let player: DocumentChangeAction<IPlayer> = dbPlayers[i];
-          this.allPlayers.push(new Player(player.payload.doc.id, player.payload.doc.data()));
-        }
-
-        //console.log('DEBUG: ' + JSON.stringify(this.allPlayers));
-
-        this.loadPlayDay();
-      } );
-  }
-
-  loadPlayDay() : void {
-    let map: ParamMap = this.route && this.route.snapshot && this.route.snapshot.paramMap || null;
-    let idString: string = map && map.get('id') || "0";
-    this.playdayDataService.getPlayDay(idString).subscribe(
-      pd => {
-        this.playday = pd.length == 1 ? new PlayDay(this.allPlayers, pd[0]) : null;
-        this.initFormAfterDataLoad();
-      });
+          this.myAllPlayers.push(new Player(player.payload.doc.id, player.payload.doc.data()));
+      }
+      this.initFormAfterDataLoad();
+    });
   }
 
   valiCancelledAndCourtsAndHours(isCancelledCtrl: AbstractControl, 
@@ -123,40 +146,19 @@ export class EditPlaydayComponent implements OnInit {
   }
   
   initFormAfterDataLoad() : void {
-    let playerArray: FormArray = this.myForm.get("players") as FormArray;
-    for (let i: number = 0; i < this.allPlayers.length; i++) {
-      let player: IPlayer = this.allPlayers[i];
-      playerArray.push(new FormControl());
-      this.choosablePlayers.push({
+    // Players have been loaded now => Set Player FormControls
+    let playerFormControls: FormArray = this.myForm.get("players") as FormArray;
+    for (let i: number = 0; i < this.myAllPlayers.length; i++) {
+      let player: Player = this.myAllPlayers[i];
+      playerFormControls.push(new FormControl());
+      this.myChoosablePlayers.push({
         id: player.id,
-        display: this.getPlayerNameById(player.id)
+        display: player.getFullName()
       });
     }
-    if (this.playday != null) {
-      let arr : FormArray = <FormArray>this.myForm.get("players");
-      for (let i : number=0; i < arr.length && i < this.playday.playerIds.length; i++) {
-        let fc:FormControl = <FormControl>arr.at(i);
-        fc.setValue(this.playday.playerIds[i]);
-      }
-      
-      this.myForm.controls.day.setValue(this.playday.dayAsDate);
-      this.myForm.controls.isCancelled.setValue(this.playday.isCancelled);
-      this.myForm.controls.numOfHours.setValue(this.playday.numOfHours);
-      this.myForm.controls.numOfCourts.setValue(this.playday.numOfCourts);
-    }
-
-    //this.myForm.valueChanges.subscribe(console.log);
+    // Fill FormControls with playday players
+    this.setFormWithPlayDay();
   }
-
-   getPlayerNameById(id: string) : string {
-     var p: IPlayer | undefined = this.allPlayers == null ? undefined : this.allPlayers.find(p => p.id == id);
-     return this.getPlayerName(p);
-   }
-   getPlayerName(p: IPlayer | undefined) : string {
-     if (p == null)
-       return "?";
-     return `${p.lastName}, ${p.firstName}`;
-   }
 
   onSubmit() {
     console.log("Day: " + this.myForm.value.day);
@@ -168,8 +170,45 @@ export class EditPlaydayComponent implements OnInit {
     console.log("isCancelled: " + this.myForm.value.isCancelled);
     console.log("numOfHours: " + this.myForm.value.numOfHours);
     console.log("numOfCourts: " + this.myForm.value.numOfCourts);
-    
+
+    if (this.myForm.valid) {
+      this.setPlayDayWithForm();
+
+      let msg: string = "";
+      if (this.myMode == UpdateMode.Insert) {
+        this.playdayDataService.insert(this.playday);
+        msg = 'Inserted successfully !'
+      } else {
+        this.playdayDataService.update(this.playday);
+        msg = 'Updated successfully !'
+      }
+
+      this.notificationService.success(msg);
+
+      this.dialogRef.close();
+    }
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
+  onClearForm(): void {
+    if (this.myMode == UpdateMode.Update)
+      throw new Error("Clear form is allowed in insert mode only!");
+    this.myForm.reset();
+    this.playday.clear();
+    this.setFormWithPlayDay();
+  }
+
+  onCancelClicked(cb: MatCheckbox) {
+    if (cb.checked) {
+      this.myForm.controls.numOfHours.setValue(1);
+      this.myForm.controls.numOfCourts.setValue(1);
+    } else {
+      this.myForm.controls.numOfHours.setValue(0);
+      this.myForm.controls.numOfCourts.setValue(0);
+    }
+  }
 
 }

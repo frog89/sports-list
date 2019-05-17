@@ -21,8 +21,7 @@ export class EditPlayerComponent implements OnInit {
   constructor(private playerDataService: PlayerDataService, 
       private dialogRef: MatDialogRef<EditPlayerComponent>,
       @Inject(MAT_DIALOG_DATA) public player: Player,
-      private notificationService: NotificationService,
-      ) {
+      private notificationService: NotificationService) {
     //console.log('DEBUG: ' + JSON.stringify(this.player));
     this.myMode = player.id.length == 0 ? UpdateMode.Insert : UpdateMode.Update;
     this.myForm = new FormGroup({
@@ -46,7 +45,6 @@ export class EditPlayerComponent implements OnInit {
   }
 
   setPlayerWithForm() {
-    this.player.id = this.myForm.controls.id.value;
     this.player.firstName = this.myForm.controls.firstName.value;
     this.player.lastName = this.myForm.controls.lastName.value;
     this.player.shortAlias = this.myForm.controls.shortAlias.value;

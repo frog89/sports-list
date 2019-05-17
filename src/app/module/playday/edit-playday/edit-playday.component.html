@@ -1,11 +1,20 @@
-<div fxLayout="row" fxLayoutAlign="space-around center">
+<div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="mat-elevation-z888">
 
-<mat-card class="edit-playground-card">
+  <mat-toolbar>
+    <span class="page-header margin-top-10px">
+      {{myMode == MyUpdateMode.Update?"Modify PlayDay":"New PlayDay"}}
+    </span>
+    <span class="fill-remaining-space"></span>
+    <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-toolbar>
+  
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <div fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between">
 
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
-        <div @slideIn class="page-header">Edit Playday</div>
         <div fxFlex="1 1 auto">
           <mat-form-field appearance="outline" color="gray" style="width: 150px;">
             <input id="dayInput"
@@ -27,17 +36,17 @@
             fxLayout="row wrap" fxLayoutGap="0px" fxLayoutAlign="space-around center">
           <div fxFlex="0 1 calc(33.3% - 0px)" 
               formArrayName="players"
-              *ngFor="let allPl of allPlayers; let i=index;">
+              *ngFor="let allPl of myAllPlayers; let i=index;">
             <mat-form-field>
               <mat-label>Player {{ allPl.id }}</mat-label>
               <mat-select [formControlName]="i">
-                <mat-option *ngFor="let chPl of choosablePlayers" [value]="chPl.id">
+                <mat-option *ngFor="let chPl of myChoosablePlayers" [value]="chPl.id">
                   {{chPl.display}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>          
-          <div *ngIf="allPlayers != null && allPlayers.length % 2 == 1"
+          <div *ngIf="myAllPlayers != null && myAllPlayers.length % 2 == 1"
               fxFlex="0 1 calc(33.3% - 0px)" style="height: 1px">
             <div class="mat-form-field-wrapper">
               <div class="mat-form-field-infix"></div>
@@ -105,9 +114,7 @@
           class="mat-raised-button mat-primary" 
           [disabled]="!myForm.valid">Save</button>
       </div>
-  </div>
+    </div>
   </form>
-
-</mat-card>
 
 </div>

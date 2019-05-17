@@ -10,9 +10,9 @@
       <mat-icon style="margin-bottom: 2px;">add</mat-icon>Create
     </button>
     <mat-form-field fxFlex="0 1 60%" class="search-form-field" floatLabel="never">
-      <input matInput [(ngModel)]="searchText" placeholder="Search" autocomplete="off"
+      <input matInput [(ngModel)]="mySearchText" placeholder="Search" autocomplete="off"
         (keyup)="applyFilter()">
-        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchText"
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="mySearchText"
             (click)="clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
@@ -20,7 +20,7 @@
   </div>
 
   <mat-table fxFlex="1 0 100%" 
-      [dataSource]="dataSource" 
+      [dataSource]="myDataSource" 
       matSort aria-label="Elements">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
@@ -75,10 +75,10 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     <mat-footer-row *matFooterRowDef="['loading']"
-      [ngClass]="{ 'hide': dataSource != null }">
+      [ngClass]="{ 'hide': myDataSource != null }">
     </mat-footer-row>
     <mat-footer-row *matFooterRowDef="['nodata']"
-      [ngClass]="{ 'hide': dataSource == null || dataSource.data.length > 0 }">
+      [ngClass]="{ 'hide': myDataSource == null || myDataSource.data.length > 0 }">
     </mat-footer-row>
   </mat-table>
 

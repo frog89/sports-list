@@ -1,7 +1,7 @@
 {
   "Saisons": [ {
     "id": "1",
-    "name": "2018-2019",
+    "name": "2018 bis 2019",
     "dayFrom": "2018-07-19T00:00:00.000Z",
     "dayTo": "2019-07-14T00:00:00.000Z"
   }],
@@ -40,6 +40,7 @@
     "id": "1",
     "day": "2019-04-04T13:59:59.999Z",
     "playerIds": ["1","3"],
+    "saisonId": "1",
     "isCancelled": false,
     "extraPayIds": [],
     "numOfHours": 1,
@@ -49,6 +50,7 @@
     "id": "2",
     "day": "2019-04-11T13:59:59.999Z",
     "playerIds": ["1","3","5"],
+    "saisonId": "1",
     "isCancelled": false,
     "extraPayIds": [],
     "numOfHours": 1,

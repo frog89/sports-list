@@ -3,8 +3,23 @@
   <div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
     <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Playday Overview</div>
   </div>
+
+  <div fxLayout="row" fxLayoutAlign="start center" class="search-div">
+    <button mat-raised-button (click)="onCreate()" class="app-button">
+      <mat-icon style="margin-bottom: 2px;">add</mat-icon>Create
+    </button>
+    <mat-form-field fxFlex="0 1 60%" class="search-form-field" floatLabel="never">
+      <input matInput [(ngModel)]="mySearchText" placeholder="Search" autocomplete="off"
+        (keyup)="applyFilter()">
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="mySearchText"
+            (click)="clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+  </div>
+
   <mat-table fxFlex="1 0 100%" mat-table class="full-width-table" 
-      [dataSource]="dataSource" 
+      [dataSource]="myDataSource" 
       matSort aria-label="Elements">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
@@ -12,13 +27,13 @@
     </ng-container>
 
     <ng-container matColumnDef="day">
-      <mat-header-cell *matHeaderCellDef mat-sort-header id="dayHeader" class="xyz">Day</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Day</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <a  [routerLink]="['/edit-playday',row.id]">{{row.dayAsDate | date:'yyyy-MM-dd' }}</a>
+        {{row.dayAsDate | date:'yyyy-MM-dd' }}
       </mat-cell>
     </ng-container>
 
-    <ng-container *ngFor="let player of players; let i=index;" 
+    <ng-container *ngFor="let player of myAllPlayers; let i=index;" 
         matColumnDef="p{{i}}"
         class="player-header">
       <mat-header-cell 
@@ -28,22 +43,62 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <div fxLayout="row" fxLayoutAlign="center center">
-          <mat-checkbox 
-            [checked]="row.hasPlayerPlayed(player) ? 'X' : null"
+          <mat-checkbox [disableRipple]="true"
+            (click)="$event.preventDefault()"
+            [checked]="row.hasPlayerPlayed(player)"
             class="player">
           </mat-checkbox>
         </div>
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="isCancelled" class="player-header">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cancelled?</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <mat-checkbox [disableRipple]="true"
+            (click)="$event.preventDefault()"
+            [checked]="row.isCancelled">
+          </mat-checkbox>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="onDelete(row.id)"><mat-icon>delete_outline</mat-icon></button>
+      </mat-cell>  
+    </ng-container>
+
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="6">
+        Loading data...
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="nodata">
+      <mat-footer-cell *matFooterCellDef colspan="6">
+        No data found
+      </mat-footer-cell>
+    </ng-container>  
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    <mat-footer-row *matFooterRowDef="['loading']"
+      [ngClass]="{ 'hide': myDataSource != null }">
+    </mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['nodata']"
+      [ngClass]="{ 'hide': myDataSource == null || myDataSource.data.length > 0 }">
+    </mat-footer-row>
+
   </mat-table>
 
-  <mat-paginator #paginator
-      [length]="dataSource == null ? 0 : dataSource.playdays == null ? 0 : dataSource.playdays.length"
-      [pageIndex]="0"
-      [pageSize]="50"
-      [pageSizeOptions]="[25, 50, 100, 250]">
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 50]"
+    [pageSize]="25"
+    showFirstLastButtons>
   </mat-paginator>
+
 </div>

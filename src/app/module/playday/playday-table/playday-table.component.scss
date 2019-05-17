@@ -1,10 +1,29 @@
-mat-header-cell, mat-cell {
+@import '../../../../app-theme.scss';
+
+mat-header-cell1, mat-cell1 {
   justify-content: center;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: lightgrey;
 }
 
-mat-header-row, mat-row {
-  min-height: 30px;
+mat-footer-row mat-footer-cell {
+  justify-content: center;
+  font-style: italic;
+}
+
+.search-div {
+  margin: 0px;
+}
+
+.search-form-field {
+  height: 50px;
+  margin-left: 10px;
+  padding: 0px 0px 0px 10px;
+  background-color: mat-color($app-primary, 100);
+  border-radius: 5px;
+}
+
+:host ::ng-deep .search-form-field div.mat-form-field-underline {
+  display: none;
 }

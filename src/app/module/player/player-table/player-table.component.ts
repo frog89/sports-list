@@ -15,10 +15,10 @@ import { PlayerDataService } from 'src/app/shared/player-data.service';
   animations: [ slideIn ]
 })
 export class PlayerTableComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<Player>;
-  searchText: string;
+  @ViewChild(MatPaginator) myPaginator: MatPaginator;
+  @ViewChild(MatSort) mySort: MatSort;
+  myDataSource: MatTableDataSource<Player>;
+  mySearchText: string;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
@@ -47,12 +47,12 @@ export class PlayerTableComponent implements AfterViewInit {
   }
 
   clearFilter(): void {
-    this.searchText = "";
+    this.mySearchText = "";
     this.applyFilter();
   }
 
   applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    this.myDataSource.filter = this.mySearchText.trim().toLowerCase();
   }
 
   onEdit(aPlayer: Player) {
@@ -80,10 +80,10 @@ export class PlayerTableComponent implements AfterViewInit {
         players.push(new Player(dbPlayer.payload.doc.id, dbPlayer.payload.doc.data()));
       }
 
-      this.dataSource = new MatTableDataSource(players);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = (p: any, filter: string) => {
+      this.myDataSource = new MatTableDataSource(players);
+      this.myDataSource.sort = this.mySort;
+      this.myDataSource.paginator = this.myPaginator;
+      this.myDataSource.filterPredicate = (p: any, filter: string) => {
         return this.displayedColumns.some((col: string) => {
           let prop: string = String(p[col]);
           return col != 'actions' && prop.toLowerCase().indexOf(filter) != -1;
