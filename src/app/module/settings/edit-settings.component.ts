@@ -3,10 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { slideIn } from 'src/app/shared/animations';
 import { SettingsDataService } from 'src/app/shared/service/settings-data.service';
 import { Settings, ISettings } from 'src/app/shared/model/settings.model';
-import { NotificationService } from 'src/app/shared/notification.service';
+import { NotificationService } from 'src/app/shared/service/notification.service';
 import { DocumentChangeAction } from 'angularfire2/firestore';
-import { SaisonDataService } from 'src/app/shared/saison-data.service';
 import { Saison, ISaison } from 'src/app/shared/model/saison.model';
+import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
 
 @Component({
   selector: 'app-edit-settings',

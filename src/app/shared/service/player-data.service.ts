@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentChangeAction, QueryFn, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
-import { IPlayer } from './model/player.model';
+import { IPlayer } from '../model/player.model';
 
 @Injectable({
   providedIn: 'root'

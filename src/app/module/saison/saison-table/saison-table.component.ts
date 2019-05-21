@@ -3,10 +3,10 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig }
 import { slideIn } from '../../../shared/animations';
 import { EditSaisonComponent } from '../edit-saison/edit-saison.component';
 import { DocumentChangeAction } from 'angularfire2/firestore';
-import { NotificationService } from '../../../shared/notification.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { NotificationService } from '../../../shared/service/notification.service';
+import { DialogService } from 'src/app/shared/service/dialog.service';
 import { Saison, ISaison } from 'src/app/shared/model/saison.model';
-import { SaisonDataService } from 'src/app/shared/saison-data.service';
+import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
 
 @Component({
   selector: 'app-saison-table',

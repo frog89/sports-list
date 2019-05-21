@@ -1,14 +1,14 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialogConfig, MatDialog } from '@angular/material';
 import { slideIn } from '../../../shared/animations';
-import { PlaydayDataService } from '../../../shared/playday-data.service';
+import { PlaydayDataService } from '../../../shared/service/playday-data.service';
 import { IPlayDay, PlayDay } from 'src/app/shared/model/playday.model';
 import { IPlayer, Player } from 'src/app/shared/model/player.model';
 import { DocumentChangeAction } from 'angularfire2/firestore';
-import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { PlayerDataService } from 'src/app/shared/service/player-data.service';
 import { EditPlaydayComponent } from '../edit-playday/edit-playday.component';
-import { NotificationService } from 'src/app/shared/notification.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { NotificationService } from 'src/app/shared/service/notification.service';
+import { DialogService } from 'src/app/shared/service/dialog.service';
 
 @Component({
   selector: 'app-playday-table',

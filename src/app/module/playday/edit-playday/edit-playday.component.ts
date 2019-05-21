@@ -4,17 +4,17 @@ import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, FormA
 
 import { PlayDay } from 'src/app/shared/model/playday.model';
 import { IPlayer, Player } from 'src/app/shared/model/player.model';
-import { PlaydayDataService } from '../../../shared/playday-data.service';
+import { PlaydayDataService } from '../../../shared/service/playday-data.service';
 import { MatCheckbox, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { slideIn } from '../../../shared/animations';
 import { DocumentChangeAction } from 'angularfire2/firestore';
-import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { PlayerDataService } from 'src/app/shared/service/player-data.service';
 import { UpdateMode } from 'src/app/shared/model/update-mode-type';
-import { NotificationService } from 'src/app/shared/notification.service';
+import { NotificationService } from 'src/app/shared/service/notification.service';
 import { SettingsDataService } from 'src/app/shared/service/settings-data.service';
 import { map } from 'rxjs/operators';
 import { Settings, ISettings } from 'src/app/shared/model/settings.model';
-import { SaisonDataService } from 'src/app/shared/saison-data.service';
+import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
 import { Saison, ISaison } from 'src/app/shared/model/saison.model';
 import { combineLatest, Observable } from 'rxjs';
 

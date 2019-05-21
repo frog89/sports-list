@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsDataService } from '../shared/service/settings-data.service';
-import { SaisonDataService } from '../shared/saison-data.service';
-import { NotificationService } from '../shared/notification.service';
+import { SaisonDataService } from '../shared/service/saison-data.service';
+import { NotificationService } from '../shared/service/notification.service';
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { ISettings, Settings } from '../shared/model/settings.model';
 

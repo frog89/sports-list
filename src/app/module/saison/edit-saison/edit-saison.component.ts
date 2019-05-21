@@ -4,8 +4,8 @@ import { slideIn } from 'src/app/shared/animations';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Saison } from 'src/app/shared/model/saison.model';
-import { NotificationService } from 'src/app/shared/notification.service';
-import { SaisonDataService } from 'src/app/shared/saison-data.service';
+import { NotificationService } from 'src/app/shared/service/notification.service';
+import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
 
 @Component({
   selector: 'app-edit-saison',

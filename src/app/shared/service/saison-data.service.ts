@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DocumentChangeAction, AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { ISaison } from './model/saison.model';
+import { ISaison } from '../model/saison.model';
 
 @Injectable({
   providedIn: 'root'

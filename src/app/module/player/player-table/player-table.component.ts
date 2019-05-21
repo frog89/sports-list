@@ -4,9 +4,9 @@ import { Player, IPlayer } from 'src/app/shared/model/player.model';
 import { slideIn } from '../../../shared/animations';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
 import { DocumentChangeAction } from 'angularfire2/firestore';
-import { NotificationService } from '../../../shared/notification.service';
-import { DialogService } from 'src/app/shared/dialog.service';
-import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { NotificationService } from '../../../shared/service/notification.service';
+import { DialogService } from 'src/app/shared/service/dialog.service';
+import { PlayerDataService } from 'src/app/shared/service/player-data.service';
 
 @Component({
   selector: 'app-player-table',

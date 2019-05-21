@@ -3,9 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Player } from 'src/app/shared/model/player.model';
 import { slideIn } from '../../../shared/animations';
-import { NotificationService } from '../../../shared/notification.service';
+import { NotificationService } from '../../../shared/service/notification.service';
 import { UpdateMode } from 'src/app/shared/model/update-mode-type';
-import { PlayerDataService } from 'src/app/shared/player-data.service';
+import { PlayerDataService } from 'src/app/shared/service/player-data.service';
 
 @Component({
   selector: 'app-edit-player',
