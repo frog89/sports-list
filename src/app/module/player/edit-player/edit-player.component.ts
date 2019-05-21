@@ -15,8 +15,8 @@ import { PlayerDataService } from 'src/app/shared/player-data.service';
 })
 export class EditPlayerComponent implements OnInit {
   MyUpdateMode = UpdateMode;
-  private myForm: FormGroup;
-  private myMode: UpdateMode;
+  myForm: FormGroup;
+  myMode: UpdateMode;
 
   constructor(private playerDataService: PlayerDataService, 
       private dialogRef: MatDialogRef<EditPlayerComponent>,

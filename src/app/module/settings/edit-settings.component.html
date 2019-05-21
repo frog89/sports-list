@@ -14,7 +14,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-select formControlName="saisonId" placeholder="Saison">
-        <ng-container *ngFor="let saison of saisons">
+        <ng-container *ngFor="let saison of mySaisons">
           <mat-option value="{{ saison.id }}">{{ saison.name }}</mat-option>
         </ng-container>
       </mat-select>

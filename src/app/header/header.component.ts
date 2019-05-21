@@ -12,7 +12,7 @@ import { ISettings, Settings } from '../shared/model/settings.model';
 })
 export class HeaderComponent implements OnInit {
 
-  private settings: Settings = new Settings();
+  mySettings: Settings = new Settings();
 
   constructor(private settingsDataService: SettingsDataService, 
       private saisonDataService: SaisonDataService, 
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
         throw new Error(`Expected is 1 settings object, but found ${dbSettings.length}`);
       }
       let dbSetting: DocumentChangeAction<ISettings> = dbSettings[0];
-      this.settings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
+      this.mySettings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
     });
   }
 

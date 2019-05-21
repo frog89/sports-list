@@ -15,9 +15,9 @@ import { Saison, ISaison } from 'src/app/shared/model/saison.model';
   animations: [ slideIn ]
 })
 export class EditSettingsComponent implements OnInit {
-  private myForm: FormGroup;
-  private saisons: Saison[] = [];
-  private settings: Settings;
+  myForm: FormGroup;
+  mySaisons: Saison[] = [];
+  mySettings: Settings;
 
   constructor(private settingsDataService: SettingsDataService, 
       private saisonDataService: SaisonDataService, 
@@ -33,10 +33,10 @@ export class EditSettingsComponent implements OnInit {
 
   loadSaisons() {
     this.saisonDataService.getList().subscribe( dbSaisons => {
-      this.saisons.length = 0;
+      this.mySaisons.length = 0;
       for (let i: number = 0; i < dbSaisons.length; i++) {
         let dbSaison: DocumentChangeAction<ISaison> = dbSaisons[i];
-        this.saisons.push(
+        this.mySaisons.push(
           new Saison(dbSaison.payload.doc.id, dbSaison.payload.doc.data())
         );
       }
@@ -50,22 +50,22 @@ export class EditSettingsComponent implements OnInit {
         throw new Error(`Expected is 1 settings object, but found ${dbSettings.length}`);
       }
       let dbSetting: DocumentChangeAction<ISettings> = dbSettings[0];
-      this.settings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
+      this.mySettings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
       this.setFormWithSettings();
     });
   }
 
   setFormWithSettings() {
     this.myForm.setValue({
-      id: this.settings.id,
-      sportName: this.settings.sportName,
-      saisonId: this.settings.saisonId
+      id: this.mySettings.id,
+      sportName: this.mySettings.sportName,
+      saisonId: this.mySettings.saisonId
     });
   }
 
   setSettingsWithForm() {
-    this.settings.sportName = this.myForm.controls.sportName.value;
-    this.settings.saisonId = this.myForm.controls.saisonId.value;
+    this.mySettings.sportName = this.myForm.controls.sportName.value;
+    this.mySettings.saisonId = this.myForm.controls.saisonId.value;
   }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class EditSettingsComponent implements OnInit {
     if (this.myForm.valid) {
       this.setSettingsWithForm();
 
-      this.settingsDataService.update(this.settings);
+      this.settingsDataService.update(this.mySettings);
       this.notificationService.success('Updated successfully !');
     }
   }

@@ -15,8 +15,8 @@ import { SaisonDataService } from 'src/app/shared/saison-data.service';
 })
 export class EditSaisonComponent implements OnInit {
   MyUpdateMode = UpdateMode;
-  private myForm: FormGroup;
-  private myMode: UpdateMode;
+  myForm: FormGroup;
+  myMode: UpdateMode;
 
   constructor(private saisonDataService: SaisonDataService, 
       private dialogRef: MatDialogRef<EditSaisonComponent>,
