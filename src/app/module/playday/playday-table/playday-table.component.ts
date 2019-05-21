@@ -112,13 +112,14 @@ export class PlaydayTableComponent implements OnInit {
       this.myDataSource = new MatTableDataSource(playdays);
       this.myDataSource.sort = this.mySort;
       this.myDataSource.paginator = this.myPaginator;
-      this.myDataSource.sortingDataAccessor = (item, property) => {
+      this.myDataSource.sortingDataAccessor = (item: PlayDay, property: string) => {
         for (let i: number = 0; i < this.myAllPlayers.length; i++) {
           if (property == `p${i}`) {
             return item.hasPlayerPlayed(this.myAllPlayers[i]);
           }
         }
-        return item[property];
+        let anyItem: any = item;
+        return anyItem[property];
       };
       this.myDataSource.filterPredicate = (p: any, filter: string) => {
         return this.displayedColumns.some((col: string) => {

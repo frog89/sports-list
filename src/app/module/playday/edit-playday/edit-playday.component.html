@@ -3,7 +3,7 @@
 
   <mat-toolbar>
     <span class="page-header margin-top-10px">
-      {{myMode == MyUpdateMode.Update?"Modify PlayDay":"New PlayDay"}}
+      {{ getHeader() }}
     </span>
     <span class="fill-remaining-space"></span>
     <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1">

@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsDataService } from '../shared/service/settings-data.service';
+import { SaisonDataService } from '../shared/saison-data.service';
+import { NotificationService } from '../shared/notification.service';
+import { DocumentChangeAction } from 'angularfire2/firestore';
+import { ISettings, Settings } from '../shared/model/settings.model';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +12,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  private settings: Settings = new Settings();
+
+  constructor(private settingsDataService: SettingsDataService, 
+      private saisonDataService: SaisonDataService, 
+      private notificationService: NotificationService) {
+    //console.log('DEBUG: ' + JSON.stringify(this.player));
+    this.loadSettings();
+  }
+
+  loadSettings() {
+    this.settingsDataService.getList().subscribe( dbSettings => {
+      if (dbSettings.length != 1) {
+        throw new Error(`Expected is 1 settings object, but found ${dbSettings.length}`);
+      }
+      let dbSetting: DocumentChangeAction<ISettings> = dbSettings[0];
+      this.settings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
+    });
+  }
 
   ngOnInit() {
   }

@@ -11,6 +11,12 @@ import { DocumentChangeAction } from 'angularfire2/firestore';
 import { PlayerDataService } from 'src/app/shared/player-data.service';
 import { UpdateMode } from 'src/app/shared/model/update-mode-type';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { SettingsDataService } from 'src/app/shared/service/settings-data.service';
+import { map } from 'rxjs/operators';
+import { Settings, ISettings } from 'src/app/shared/model/settings.model';
+import { SaisonDataService } from 'src/app/shared/saison-data.service';
+import { Saison, ISaison } from 'src/app/shared/model/saison.model';
+import { combineLatest, Observable } from 'rxjs';
 
 export interface PlayerItem {
   id: string;
@@ -28,10 +34,14 @@ export class EditPlaydayComponent {
 
   myForm: FormGroup;
   myAllPlayers: Player[] = [];
+  mySettings: Settings;
+  myActiveSaison: Saison;
   myChoosablePlayers: PlayerItem[] = [];
   myMode: UpdateMode;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, 
+      private settingsDataService: SettingsDataService,
+      private saisonDataService: SaisonDataService,
       private playdayDataService: PlaydayDataService,
       private playerDataService: PlayerDataService,
       private dialogRef: MatDialogRef<EditPlaydayComponent>,
@@ -56,7 +66,7 @@ export class EditPlaydayComponent {
         this.myForm.controls.numOfHours,
         this.myForm.controls.numOfCourts)]);
 
-    this.loadPlayers();
+    this.loadData();
   }
 
   setFormWithPlayDay() {
@@ -94,15 +104,47 @@ export class EditPlaydayComponent {
     }
   }
 
-  loadPlayers() {
-    // Fetch Playday for passed id
-    this.playerDataService.getList(false).subscribe(
-      dbPlayers => {
-        this.myAllPlayers.length = 0;
-        for (let i: number = 0; i < dbPlayers.length; i++) {
-          let player: DocumentChangeAction<IPlayer> = dbPlayers[i];
-          this.myAllPlayers.push(new Player(player.payload.doc.id, player.payload.doc.data()));
+  getSaisonName(): string {
+    if (this.myActiveSaison == undefined)
+      return "";
+    return this.myActiveSaison.name;
+  }
+
+  getHeader(): string {
+    if (this.myMode == UpdateMode.Update) {
+      return `Modify PlayDay (Saison ${this.getSaisonName()})`;
+    }
+    return `New PlayDay (Saison ${this.getSaisonName()})`;
+  }
+
+  loadData() {
+    combineLatest(
+      this.settingsDataService.getList(),
+      this.saisonDataService.getList(),
+      this.playerDataService.getList(false)
+    ).subscribe(([dbSettingsList, dbSaisonList, dbPlayerList]) => {
+      if (dbSettingsList.length != 1) {
+        throw new Error(`Expected is 1 settings object in DB, but ${dbSettingsList.length} have been found!`);
       }
+      let dbSettings: DocumentChangeAction<ISettings> =  dbSettingsList[0];
+      this.mySettings = new Settings(dbSettings.payload.doc.id, dbSettings.payload.doc.data());
+      this.playday.saisonId = this.mySettings.saisonId;
+
+      let dbActiveSaison: DocumentChangeAction<ISaison> | undefined =
+        dbSaisonList.find(s => s.payload.doc.id == this.playday.saisonId);
+      if (dbActiveSaison == undefined) {
+        throw new Error(`Cannot find saison in DB having ID = ${this.playday.saisonId}!`);
+      }
+      this.myActiveSaison = new Saison(dbActiveSaison.payload.doc.id, dbActiveSaison.payload.doc.data());
+      //console.log('DEBUG: ' + JSON.stringify(this.myActiveSaison));
+
+      this.myAllPlayers.length = 0;
+      for (let i: number = 0; i < dbPlayerList.length; i++) {
+        let dbPlayer: DocumentChangeAction<IPlayer> = dbPlayerList[i];
+        let player: Player = new Player(dbPlayer.payload.doc.id, dbPlayer.payload.doc.data())
+        this.myAllPlayers.push(player);
+      }
+
       this.initFormAfterDataLoad();
     });
   }
@@ -148,12 +190,14 @@ export class EditPlaydayComponent {
   initFormAfterDataLoad() : void {
     // Players have been loaded now => Set Player FormControls
     let playerFormControls: FormArray = this.myForm.get("players") as FormArray;
-    for (let i: number = 0; i < this.myAllPlayers.length; i++) {
+    this.myChoosablePlayers.length = 0;
+    this.myChoosablePlayers.push({id: "", display: "-"});
+      for (let i: number = 0; i < this.myAllPlayers.length; i++) {
       let player: Player = this.myAllPlayers[i];
       playerFormControls.push(new FormControl());
       this.myChoosablePlayers.push({
         id: player.id,
-        display: player.getFullName()
+        display: player.shortAlias
       });
     }
     // Fill FormControls with playday players

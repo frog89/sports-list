@@ -41,15 +41,15 @@ export class EditSaisonComponent implements OnInit {
     this.myForm.setValue({
       id: this.saison.id,
       name: this.saison.name,
-      dayFrom: this.saison.dayFrom,
-      dayTo: this.saison.dayTo
+      dayFrom: this.saison.dayFromAsDate,
+      dayTo: this.saison.dayToAsDate
     });
   }
 
   setSaisonWithForm() {
     this.saison.name = this.myForm.controls.name.value;
-    this.saison.dayFrom = this.myForm.controls.dayFrom.value;
-    this.saison.dayTo = this.myForm.controls.dayTo.value;
+    this.saison.dayFromAsDate = this.myForm.controls.dayFrom.value;
+    this.saison.dayToAsDate = this.myForm.controls.dayTo.value;
   }
 
   onSubmit() {

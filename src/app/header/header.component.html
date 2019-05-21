@@ -1,21 +1,13 @@
 <div class="main-menu" fxLayout="row" fxLayoutAlign="space-around center">
   <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="space-around center">
     <button fxHide.gt-xs="TRUE" mat-icon-button [matMenuTriggerFor]="admin_menu">
-      <mat-icon>view_headline</mat-icon>
+      <mat-icon color="accent">view_headline</mat-icon>
     </button>
-    <div fxFlex="170px" class="app-title">Badminton List</div>
+    <div fxFlex="170px" class="app-title">{{ settings.sportName }}</div>
     <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
         color="primary" routerLink="playday-table">
       <span>Playdays</span>
     </button>
-    <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
-        color="primary" routerLink="saison-table">
-      <span>Saisons</span>
-    </button>  
-    <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
-        color="primary" routerLink="player-table">
-      <span>Players</span>
-    </button>  
     <div fxFlex="*"> </div>
     <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
         color="primary" [matMenuTriggerFor]="admin_menu">
@@ -24,15 +16,31 @@
   </div>
 
   <mat-menu #admin_menu="matMenu" xPosition="before">
+    <button mat-menu-item [matMenuTriggerFor]="preferences_menu">
+      <span>Preferences</span>
+    </button>
+
+    <button fxHide.gt-xs="TRUE" mat-menu-item routerLink="playday-table">
+      <span>Playdays</span>
+    </button>
     <button mat-menu-item routerLink="logout">
       <span>Logout</span>
-    </button>
-    <button mat-menu-item routerLink="settings">
-      <span>Settings</span>
     </button>
     <button mat-menu-item routerLink="about">
       <span>About</span>
     </button>
+  </mat-menu>
+
+  <mat-menu #preferences_menu="matMenu" xPosition="before">
+    <button mat-menu-item routerLink="saison-table">
+      <span>Saisons</span>
+    </button>  
+    <button mat-menu-item routerLink="player-table">
+      <span>Players</span>
+    </button>  
+    <button mat-menu-item routerLink="edit-settings">
+      <span>Settings</span>
+    </button>  
   </mat-menu>
 </div>
 

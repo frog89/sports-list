@@ -1,0 +1,30 @@
+<div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="mat-elevation-z888">
+
+<div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
+  <div @slideIn fxFlex="1 0 50%" class="page-header margin-top-10px">Edit Settings</div>
+</div>
+  
+<form [formGroup]="myForm" class="normal-form" 
+    (submit)="onSubmit()">
+  <div fxLayout="column" fxLayoutAlign="space-between stretch">
+    <mat-form-field>
+      <input formControlName="sportName" matInput placeholder="Sport Name">
+      <mat-error>This field is mandatory!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select formControlName="saisonId" placeholder="Saison">
+        <ng-container *ngFor="let saison of saisons">
+          <mat-option value="{{ saison.id }}">{{ saison.name }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="myForm.invalid"
+        style="margin: 5px;">Submit</button>
+    </div>
+  </div>
+</form>
+
+</div>

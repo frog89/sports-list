@@ -36,13 +36,13 @@ export class Saison implements ISaison {
     return new Date(this.dayFrom);
   }
   set dayFromAsDate(aDate : Date) {
-    this.dayFrom = Date.prototype.toJSON(aDate);
+    this.dayFrom = aDate.toISOString();
   }
 
   get dayToAsDate(): Date {
     return new Date(this.dayTo);
   }
   set dayToAsDate(aDate : Date) {
-    this.dayTo = Date.prototype.toJSON(aDate);
+    this.dayTo = aDate.toISOString();
   }
 }
