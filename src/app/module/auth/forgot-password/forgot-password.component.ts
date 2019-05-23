@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/service/auth.service';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class ForgotPasswordComponent implements OnInit {
 
   constructor(public authService: AuthService) {
   }
 
   ngOnInit() {
   }
+
 }

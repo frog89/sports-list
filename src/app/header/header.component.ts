@@ -4,6 +4,7 @@ import { SaisonDataService } from '../shared/service/saison-data.service';
 import { NotificationService } from '../shared/service/notification.service';
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { ISettings, Settings } from '../shared/model/settings.model';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,9 +15,8 @@ export class HeaderComponent implements OnInit {
 
   mySettings: Settings = new Settings();
 
-  constructor(private settingsDataService: SettingsDataService, 
-      private saisonDataService: SaisonDataService, 
-      private notificationService: NotificationService) {
+  constructor(private settingsDataService: SettingsDataService,
+      private authService: AuthService) {
     //console.log('DEBUG: ' + JSON.stringify(this.player));
     this.loadSettings();
   }

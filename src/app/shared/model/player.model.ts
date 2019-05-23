@@ -1,5 +1,6 @@
 export interface IPlayer {
   id: string;
+  email: string | null;
   firstName: String;
   lastName: String;
   shortAlias: string;
@@ -8,6 +9,7 @@ export interface IPlayer {
 
 export class Player implements IPlayer {
   id: string;
+  email: string | null;
   firstName: string;
   lastName: string;
   shortAlias: string;

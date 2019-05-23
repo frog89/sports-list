@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { EditSettingsComponent } from './edit-settings.component';
-import { AuthGuard } from 'src/app/shared/service/auth.guard';
+import { AuthGuard } from 'src/app/shared/auth.guard';
 
 const routes: Routes = [
   { path: "edit-settings", component: EditSettingsComponent, canActivate: [AuthGuard] },

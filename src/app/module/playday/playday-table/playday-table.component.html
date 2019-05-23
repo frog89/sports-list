@@ -21,11 +21,6 @@
   <mat-table fxFlex="1 0 100%" mat-table class="full-width-table" 
       [dataSource]="myDataSource" 
       matSort aria-label="Elements">
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="day">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Day</mat-header-cell>
       <mat-cell *matCellDef="let row">

@@ -94,7 +94,6 @@ export class PlaydayTableComponent implements OnInit {
 
     this.playdayDataService.getList().subscribe(dbPlaydays => {
       this.displayedColumns.length = 0;
-      this.displayedColumns.push("id");
       this.displayedColumns.push("day");
       this.displayedColumns.push("isCancelled");
       for (let i: number = 0; i < this.myAllPlayers.length; i++) {

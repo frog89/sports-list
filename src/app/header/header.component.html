@@ -3,12 +3,19 @@
     <button fxHide.gt-xs="TRUE" mat-icon-button [matMenuTriggerFor]="admin_menu">
       <mat-icon color="accent">view_headline</mat-icon>
     </button>
-    <div fxFlex="170px" class="app-title">{{ mySettings.sportName }}</div>
+    <div fxFlex="170px" class="app-title">
+      <div *ngIf="authService.loggedInPlayer">
+        {{ mySettings.sportName }}
+      </div>
+      <div *ngIf="!authService.loggedInPlayer">
+          Sports List
+      </div>
+    </div>
+    <div fxFlex="*"> </div>
     <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
         color="primary" routerLink="playday-table">
       <span>Playdays</span>
     </button>
-    <div fxFlex="*"> </div>
     <button fxHide.lt-sm="TRUE" fxFlex="100px" class="app-menu-button" mat-button 
         color="primary" [matMenuTriggerFor]="admin_menu">
       <span>Admin</span>
@@ -23,7 +30,7 @@
     <button fxHide.gt-xs="TRUE" mat-menu-item routerLink="playday-table">
       <span>Playdays</span>
     </button>
-    <button mat-menu-item routerLink="logout">
+    <button mat-menu-item (click)="authService.SignOut()">
       <span>Logout</span>
     </button>
     <button mat-menu-item routerLink="about">
