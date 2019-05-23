@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   mySettings: Settings = new Settings();
 
   constructor(private settingsDataService: SettingsDataService,
-      private authService: AuthService) {
+      public authService: AuthService) {
     //console.log('DEBUG: ' + JSON.stringify(this.player));
     this.loadSettings();
   }
