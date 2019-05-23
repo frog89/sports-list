@@ -21,7 +21,7 @@ export class SaisonTableComponent implements AfterViewInit {
   searchText: string;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name', 'dayFrom', 'dayTo', 'actions'];
+  displayedColumns = ['name', 'dayFrom', 'dayTo', 'actions'];
 
   constructor(private saisonDataService: SaisonDataService, 
     private notificationService: NotificationService, 

@@ -22,6 +22,9 @@ export class AuthService {
       }
       this.playerDataService.getByAuthId(authUser.uid).subscribe(player => {
         this.loggedInPlayer = player;
+        this.ngZone.run(() => {
+          this.router.navigate(['playday-table']);
+        });
       });  
     });
   }

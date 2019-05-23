@@ -21,7 +21,7 @@ export class PlayerTableComponent implements AfterViewInit {
   mySearchText: string;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
+  displayedColumns = ['firstName', 'lastName', 'shortAlias', 'isActive', 'actions'];
 
   constructor(private playerDataService: PlayerDataService, 
     private notificationService: NotificationService, 

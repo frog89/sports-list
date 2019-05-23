@@ -1,4 +1,8 @@
 {
+  "Authentications": [ {
+    "id": "42",
+    "playerId": "1"
+  } ],
   "Settings": [ {
     "id": "1",
     "sportName": "Badminton",

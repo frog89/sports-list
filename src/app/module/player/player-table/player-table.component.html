@@ -22,11 +22,6 @@
   <mat-table fxFlex="1 0 100%" 
       [dataSource]="myDataSource" 
       matSort aria-label="Elements">
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="firstName">
       <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
       <mat-cell mat-cell *matCellDef="let row">{{row.firstName}}</mat-cell>
