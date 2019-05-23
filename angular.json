@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "badminton": {
+    "sports-list": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/badminton",
+            "outputPath": "dist/sports-list",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "badminton:build"
+            "browserTarget": "sports-list:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "badminton:build:production"
+              "browserTarget": "sports-list:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "badminton:build"
+            "browserTarget": "sports-list:build"
           }
         },
         "test": {
@@ -107,7 +107,7 @@
         }
       }
     },
-    "badminton-e2e": {
+    "sports-list-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -116,11 +116,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "badminton:serve"
+            "devServerTarget": "sports-list:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "badminton:serve:production"
+              "devServerTarget": "sports-list:serve:production"
             }
           }
         },
@@ -136,5 +136,5 @@
       }
     }
   },
-  "defaultProject": "badminton"
+  "defaultProject": "sports-list"
 }
