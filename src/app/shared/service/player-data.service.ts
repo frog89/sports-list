@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentChangeAction, QueryFn, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
-import { IPlayer } from '../model/player.model';
+import { Observable, of } from 'rxjs';
+import { IPlayer, Player } from '../model/player.model';
+import { IAuthentication } from '../model/authentication.model';
+import { take, map, mergeMap } from 'rxjs/operators';
+import { AuthenticationDataService } from './authentication-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,9 @@ import { IPlayer } from '../model/player.model';
 export class PlayerDataService {
   private readonly MyCollectionName: string = "Players";
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore,
+    private authenticationDataService: AuthenticationDataService) { 
+  }
 
   getList(aLoadInactive: boolean) : Observable<DocumentChangeAction<IPlayer>[]> {
     let queryFn: QueryFn | undefined = ref => ref.where('isActive', '==', true);
@@ -17,6 +22,25 @@ export class PlayerDataService {
       queryFn = undefined;
     }
     return this.afs.collection<IPlayer>(this.MyCollectionName, queryFn).snapshotChanges();
+  }
+
+  getByAuthId(aAuthId: string) : Observable<Player | null> {
+    let playerObservable = (auth: IAuthentication | undefined) => {
+      if (auth == undefined) {
+        return of(null);
+      }
+      return this.afs.doc<IPlayer>(`${this.MyCollectionName}/${auth.playerId}`).valueChanges().pipe(
+        map(dbPlayer => {
+          if (dbPlayer == undefined)
+            return null;
+          return new Player(dbPlayer.id, dbPlayer);
+        })
+      );
+    }
+
+    return this.authenticationDataService.getByAuthId(aAuthId).pipe(
+      mergeMap(playerObservable)
+    );
   }
 
   insert(player: IPlayer): void {
