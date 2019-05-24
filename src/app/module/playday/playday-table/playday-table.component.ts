@@ -52,8 +52,7 @@ export class PlaydayTableComponent implements OnInit {
     let dialogConfig: MatDialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "95%";
-    dialogConfig.maxWidth = "95%";
+    dialogConfig.panelClass = "edit-dialog-container";
     if (aData == undefined) {
       aData = new PlayDay();
     }

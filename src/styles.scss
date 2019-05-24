@@ -19,7 +19,7 @@
 .page-header {
   border-bottom: solid; 
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .padding-0px .mat-dialog-container {
@@ -68,4 +68,17 @@ form.normal-form {
 
 .hide {
   display: none;
+}
+
+.btn-dialog-close {
+ transform: scaleX(0.6) scaleY(0.8);
+}
+
+.edit-dialog-content {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.edit-dialog-container .mat-dialog-container {
+  padding: 5px;
 }

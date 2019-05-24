@@ -33,8 +33,7 @@ export class PlayerTableComponent implements AfterViewInit {
     let dialogConfig: MatDialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "95%";
-    dialogConfig.maxWidth = "95%";
+    dialogConfig.panelClass = "edit-dialog-container";
     if (aData == undefined) {
       aData = new Player();
     }

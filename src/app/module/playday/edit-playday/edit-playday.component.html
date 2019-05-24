@@ -1,5 +1,6 @@
-<mat-dialog-content id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
-    class="mat-elevation-z888">
+<mat-dialog-content id="layoutDiv" 
+    fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
+    class="edit-dialog-content mat-elevation-z888">
 
   <mat-toolbar>
     <span class="page-header">
@@ -38,7 +39,7 @@
               formArrayName="players"
               *ngFor="let allPl of myAllPlayers; let i=index;">
             <mat-form-field>
-              <mat-label>Player {{ allPl.id }}</mat-label>
+              <mat-label>Player {{ i+1 }}</mat-label>
               <mat-select [formControlName]="i">
                 <mat-option *ngFor="let chPl of myChoosablePlayers" [value]="chPl.id">
                   {{chPl.display}}
