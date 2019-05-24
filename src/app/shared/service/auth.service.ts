@@ -4,37 +4,45 @@ import { AngularFireAuth } from  '@angular/fire/auth';
 import { auth } from  'firebase/app';
 import { Player } from '../model/player.model';
 import { PlayerDataService } from './player-data.service';
+import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  loggedInPlayer: Player | null = null;
+  loginPlayer$: Subject<Player | null>;
+  private currentLoginPlayer: Player | null;
 
   constructor(
       private afAuth: AngularFireAuth,
       private playerDataService: PlayerDataService,
       private router: Router,
       public ngZone: NgZone) {
+    this.loginPlayer$ = new Subject<Player | null>();
+    this.loginPlayer$.subscribe(p => {
+      this.currentLoginPlayer = p;
+    });
+
     this.afAuth.authState.subscribe(authUser => {
       if (authUser == null) {
-        return;
+        this.loginPlayer$.next(null);
+      } else {
+        this.playerDataService.getByAuthId(authUser.uid).subscribe(player => {
+          this.loginPlayer$.next(player);
+          this.ngZone.run(() => {
+            this.router.navigate(['playday-table']);
+          });
+        });  
       }
-      this.playerDataService.getByAuthId(authUser.uid).subscribe(player => {
-        this.loggedInPlayer = player;
-        this.ngZone.run(() => {
-          this.router.navigate(['playday-table']);
-        });
-      });  
     });
   }
 
-  private updateUserData(aUser: firebase.User | null, navigationTarget?: string) {
+  private updateLoginPlayer(aUser: firebase.User | null, navigationTarget?: string) {
     if (aUser == null) {
-      return;
+      return this.loginPlayer$.next(null);
     }
     this.playerDataService.getByAuthId(aUser.uid).subscribe(player => {
-      this.loggedInPlayer = player;
+      this.loginPlayer$.next(player);
       if (player != null) {
         player.email = aUser.email;
         this.playerDataService.update(player);
@@ -48,7 +56,7 @@ export class AuthService {
   }
 
   get isLoggedIn(): boolean {
-    if (this.loggedInPlayer != null)
+    if (this.currentLoginPlayer != null)
       return true;
     return false;
   }
@@ -56,7 +64,7 @@ export class AuthService {
   SignIn(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.updateUserData(result.user, "playday-table");
+        this.updateLoginPlayer(result.user, "playday-table");
       }).catch((error) => {
         window.alert(error.message)
       })
@@ -68,7 +76,7 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
-        this.updateUserData(result.user, 'verify-email-address');
+        this.updateLoginPlayer(result.user, 'verify-email-address');
         this.SendVerificationMail();
       }).catch((error) => {
         window.alert(error.message)
@@ -107,7 +115,7 @@ export class AuthService {
   AuthLogin(provider: auth.AuthProvider) {
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
-      this.updateUserData(result.user, 'playday-table');
+      this.updateLoginPlayer(result.user, 'playday-table');
     }).catch((error) => {
       window.alert(error)
     })
@@ -116,7 +124,7 @@ export class AuthService {
   // Sign out 
   SignOut() {
     return this.afAuth.auth.signOut().then(() => {
-      this.loggedInPlayer = null;
+      this.loginPlayer$.next(null);
       this.router.navigate(['login']);
     })
   }

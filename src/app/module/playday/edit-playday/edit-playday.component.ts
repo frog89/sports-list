@@ -205,6 +205,7 @@ export class EditPlaydayComponent {
   }
 
   onSubmit() {
+    /*
     console.log("Day: " + this.myForm.value.day);
     console.log("playerControl1: " + this.myForm.value.players[0]);
     console.log("playerControl2: " + this.myForm.value.players[1]);
@@ -214,6 +215,7 @@ export class EditPlaydayComponent {
     console.log("isCancelled: " + this.myForm.value.isCancelled);
     console.log("numOfHours: " + this.myForm.value.numOfHours);
     console.log("numOfCourts: " + this.myForm.value.numOfCourts);
+    */
 
     if (this.myForm.valid) {
       this.setPlayDayWithForm();

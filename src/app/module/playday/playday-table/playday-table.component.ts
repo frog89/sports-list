@@ -100,6 +100,7 @@ export class PlaydayTableComponent implements OnInit {
         let col: string = `p${i}`;
         this.displayedColumns.push(col);
       }
+      this.displayedColumns.push("remark");
       this.displayedColumns.push("actions");
 
       playdays.length = 0;

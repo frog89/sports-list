@@ -67,6 +67,13 @@
       </mat-cell>  
     </ng-container>
 
+    <ng-container matColumnDef="remark">
+      <mat-header-cell *matHeaderCellDef>Remark</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row.remark }}
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="loading">
       <mat-footer-cell *matFooterCellDef colspan="6">
         Loading data...

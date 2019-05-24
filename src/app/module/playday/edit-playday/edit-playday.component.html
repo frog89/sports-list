@@ -63,7 +63,7 @@
       </div>
 
       <div fxLayout="column" fxLayoutAlign="space-around center">
-        <div fxFlex="0 1 calc(30%-90px)" fxFlexOffset="30px" 
+        <div fxFlex="0 1 calc(30%-30px)" fxFlexOffset="30px" 
             style="margin-top: 20px; margin-bottom: 20px;">
           <mat-checkbox id="idIsCancelled" #eleIdIsCancelled 
             (click)="onCancelClicked(eleIdIsCancelled)" 
@@ -84,6 +84,12 @@
             <input matInput id="idNumOfCourts" type="number" formControlName="numOfCourts"/>
           </mat-form-field>
         </div>
+      </div>
+
+      <div fxFlex="1 1 auto" fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <mat-form-field fxFlex="90%">
+          <input matInput formControlName="remark" placeholder="Remark">
+        </mat-form-field>
       </div>
 
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
