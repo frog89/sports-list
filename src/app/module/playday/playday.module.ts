@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PlaydayRoutingModule } from './playday-routing.module';
 import { PlaydayTableComponent } from './playday-table/playday-table.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule, MatFormField, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatOptionModule, MatSelectModule, MatCheckboxModule, MatCardModule, MatIconModule, MatButtonModule, MatToolbarModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatFormField, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatOptionModule, MatSelectModule, MatCheckboxModule, MatCardModule, MatIconModule, MatButtonModule, MatToolbarModule, MatDialogModule } from '@angular/material';
 import { EditPlaydayComponent } from './edit-playday/edit-playday.component';
 
 @NgModule({
@@ -26,6 +26,7 @@ import { EditPlaydayComponent } from './edit-playday/edit-playday.component';
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
