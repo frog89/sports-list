@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/shared/service/notification.service
 import { DocumentChangeAction } from 'angularfire2/firestore';
 import { Saison, ISaison } from 'src/app/shared/model/saison.model';
 import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
+import { SettingsService } from 'src/app/shared/service/settings.service';
 
 @Component({
   selector: 'app-edit-settings',
@@ -19,10 +20,15 @@ export class EditSettingsComponent implements OnInit {
   mySaisons: Saison[] = [];
   mySettings: Settings;
 
-  constructor(private settingsDataService: SettingsDataService, 
+  constructor(private settingsService: SettingsService, 
       private saisonDataService: SaisonDataService, 
       private notificationService: NotificationService) {
-    //console.log('DEBUG: ' + JSON.stringify(this.player));
+    let settings: Settings | null = this.settingsService.settings$.getValue();
+    if (settings == null) {
+      throw new Error("Settings are not allowed to be null !");
+    }
+    this.mySettings = settings;
+    //console.log('DEBUG: ' + JSON.stringify(this.mySettings));
     this.myForm = new FormGroup({
       id: new FormControl({value: null, disabled: true}),
       sportName: new FormControl("", Validators.required),
@@ -40,17 +46,6 @@ export class EditSettingsComponent implements OnInit {
           new Saison(dbSaison.payload.doc.id, dbSaison.payload.doc.data())
         );
       }
-      this.loadSettings();
-    });
-  }
-
-  loadSettings() {
-    this.settingsDataService.getList().subscribe( dbSettings => {
-      if (dbSettings.length != 1) {
-        throw new Error(`Expected is 1 settings object, but found ${dbSettings.length}`);
-      }
-      let dbSetting: DocumentChangeAction<ISettings> = dbSettings[0];
-      this.mySettings = new Settings(dbSetting.payload.doc.id, dbSetting.payload.doc.data()); 
       this.setFormWithSettings();
     });
   }
@@ -75,7 +70,7 @@ export class EditSettingsComponent implements OnInit {
     if (this.myForm.valid) {
       this.setSettingsWithForm();
 
-      this.settingsDataService.update(this.mySettings);
+      this.settingsService.update(this.mySettings);
       this.notificationService.success('Updated successfully !');
     }
   }

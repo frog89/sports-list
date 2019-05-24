@@ -4,23 +4,26 @@ import { AngularFireAuth } from  '@angular/fire/auth';
 import { auth } from  'firebase/app';
 import { Player } from '../model/player.model';
 import { PlayerDataService } from './player-data.service';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  loginPlayer$: Subject<Player | null>;
-  private currentLoginPlayer: Player | null;
+  loginPlayer$: BehaviorSubject<Player | null>;
 
   constructor(
       private afAuth: AngularFireAuth,
       private playerDataService: PlayerDataService,
+      private settingsService: SettingsService,
       private router: Router,
       public ngZone: NgZone) {
-    this.loginPlayer$ = new Subject<Player | null>();
+    this.loginPlayer$ = new BehaviorSubject<Player | null>(null);
     this.loginPlayer$.subscribe(p => {
-      this.currentLoginPlayer = p;
+      if (p != null) {
+        this.settingsService.load();
+      }
     });
 
     this.afAuth.authState.subscribe(authUser => {
@@ -56,7 +59,7 @@ export class AuthService {
   }
 
   get isLoggedIn(): boolean {
-    if (this.currentLoginPlayer != null)
+    if (this.loginPlayer$.getValue() != null)
       return true;
     return false;
   }
