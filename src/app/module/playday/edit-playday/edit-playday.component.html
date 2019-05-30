@@ -12,8 +12,9 @@
     </button>
   </mat-toolbar>
   
-  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-    <div fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between">
+  <form [formGroup]="myForm" class="normal-form"
+      (ngSubmit)="onSubmit()">
+    <div fxLayout="column" fxLayoutAlign="space-between stretch">
 
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
         <div fxFlex="1 1 auto">

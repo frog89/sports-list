@@ -1,17 +1,5 @@
 @import '../../../../app-theme.scss';
 
-mat-header-cell1, mat-cell1 {
-  justify-content: center;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: lightgrey;
-}
-
-mat-footer-row mat-footer-cell {
-  justify-content: center;
-  font-style: italic;
-}
-
 .search-div {
   margin: 0px;
 }

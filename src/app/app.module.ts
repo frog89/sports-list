@@ -17,8 +17,8 @@ import { PlayerModule } from './module/player/player.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AppErrorStateMatcher } from './shared/AppErrorStateMatcher';
 import { SaisonModule } from './module/saison/saison.module';
-import { EditSettingsComponent } from './module/settings/edit-settings.component';
 import { SettingsModule } from './module/settings/settings.module';
+import { ExtraPayKindModule } from './module/extra-pay-kind/extra-pay-kind.module';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBBtbLqRZe4mGglvBh-p5oPQDLoxZmfyRQ",
@@ -47,6 +47,7 @@ export const firebaseConfig = {
     PlayerModule,
     SaisonModule,
     SettingsModule,
+    ExtraPayKindModule,
     AppRoutingModule,
     MatNativeDateModule,
     MatCardModule,

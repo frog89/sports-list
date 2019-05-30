@@ -1,7 +1,8 @@
 <div id="layoutDiv" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="space-between" 
     class="mat-elevation-z888">
+
   <div id="headerLayoutDiv" fxLayout="column" fxLayoutAlign="space-between center">
-    <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Playday Overview</div>
+    <div @slideIn fxFlex="1 0 30%" class="page-header margin-top-10px">Extra Pay Kinds</div>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="start center" class="search-div">
@@ -18,44 +19,17 @@
     </mat-form-field>
   </div>
 
-  <mat-table fxFlex="1 0 100%" mat-table class="full-width-table" 
+  <mat-table fxFlex="1 0 100%" 
       [dataSource]="myDataSource" 
       matSort aria-label="Elements">
-    <ng-container matColumnDef="day">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Day</mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        {{row.dayAsDate | date:'yyyy-MM-dd' }}
-      </mat-cell>
+    <ng-container matColumnDef="purpose">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Purpose</mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.purpose}}</mat-cell>
     </ng-container>
 
-    <ng-container *ngFor="let player of myAllPlayers; let i=index;" 
-        matColumnDef="p{{i}}"
-        class="player-header">
-      <mat-header-cell 
-        *matHeaderCellDef 
-        mat-sort-header>
-        {{ player.shortAlias }}
-      </mat-header-cell>
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <mat-cell *matCellDef="let row">
-          <mat-checkbox
-            [disabled]="true"
-            [checked]="row.hasPlayerPlayed(player)"
-            class="player">
-          </mat-checkbox>
-        </mat-cell>
-      </div>
-  </ng-container>
-
-    <ng-container matColumnDef="isCancelled" class="player-header">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Canc.?</mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <mat-checkbox [disabled]="true"
-            [checked]="row.isCancelled">
-          </mat-checkbox>
-        </div>
-      </mat-cell>
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.amount}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
@@ -64,13 +38,6 @@
         <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
         <button mat-icon-button color="warn" (click)="onDelete(row.id)"><mat-icon>delete_outline</mat-icon></button>
       </mat-cell>  
-    </ng-container>
-
-    <ng-container matColumnDef="remark">
-      <mat-header-cell *matHeaderCellDef>Remark</mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        {{ row.remark }}
-      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="loading">
@@ -82,24 +49,21 @@
       <mat-footer-cell *matFooterCellDef colspan="6">
         No data found
       </mat-footer-cell>
-    </ng-container>  
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
     <mat-footer-row *matFooterRowDef="['loading']"
       [ngClass]="{ 'hide': myDataSource != null }">
     </mat-footer-row>
     <mat-footer-row *matFooterRowDef="['nodata']"
       [ngClass]="{ 'hide': myDataSource == null || myDataSource.data.length > 0 }">
     </mat-footer-row>
-
   </mat-table>
 
   <mat-paginator
-    [pageSizeOptions]="[10, 25, 50]"
-    [pageSize]="25"
+    [pageSizeOptions]="[5, 10]"
+    [pageSize]="5"
     showFirstLastButtons>
   </mat-paginator>
-
 </div>

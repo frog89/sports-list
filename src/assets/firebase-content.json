@@ -18,31 +18,31 @@
     "id": "1",
     "firstName": "Frank",
     "lastName": "Augustin",
-    "shortAlias": "Frank",
+    "shortAlias": "F.",
     "isActive": true
   }, {
     "id": "2",
     "firstName": "Thomas",
     "lastName": "Busalla",
-    "shortAlias": "Thomas",
+    "shortAlias": "T.",
     "isActive": true
   }, {
     "id": "3",
     "firstName": "Markus",
     "lastName": "Philipp",
-    "shortAlias": "Markus",
+    "shortAlias": "M.P.",
     "isActive": true
   }, {
     "id": "4",
     "firstName": "Marc",
     "lastName": "Nordmann",
-    "shortAlias": "Marc",
+    "shortAlias": "M.N.",
     "isActive": true
   }, {
     "id": "5",
     "firstName": "Jan-Niklas",
     "lastName": "Schäfer",
-    "shortAlias": "Jan-Niklas",
+    "shortAlias": "J-N.",
     "isActive": false
   } ],
   "PlayDays": [ {
@@ -66,10 +66,19 @@
     "numOfCourts": 1,
     "remark": null
   } ],
-  "ExtraPay": [ {
+  "ExtraPayKinds": [ {
     "id": "1",
-    "playerId": 1,
-    "amount": 0,
-    "remark": "licht"
+    "purpose": "Light",
+    "amount": 1
+  }, {
+    "id": "2",
+    "purpose": "Other",
+    "amount": 0
+  } ],
+  "ExtraPays": [ {
+    "id": "1",
+    "playerId": "1",
+    "playDayId": "1",
+    "amount": 1
   } ]
 }
