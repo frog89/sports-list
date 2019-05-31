@@ -14,7 +14,7 @@
   
   <form [formGroup]="myForm" class="normal-form"
       (ngSubmit)="onSubmit()">
-    <div fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div fxLayout="column" fxLayoutAlign="space-between stretch">    
 
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
         <div fxFlex="1 1 auto">
@@ -26,13 +26,13 @@
               placeholder="Enter a day" />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="myForm.controls.day.hasError('required')">
-              Day is required!
+            <mat-error *ngIf="myValidationErrors.day">
+              {{ myValidationErrors.day }}
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-      
+
       <div fxFlex="1 1 auto">
         <div *ngIf="playday != null"
             fxLayout="row wrap" fxLayoutGap="0px" fxLayoutAlign="space-around center">
@@ -116,12 +116,46 @@
           </mat-error>
         </div>
       </div>
-      
+
+      <div formArrayName="extraPays">
+        <div formGroupName="0">
+          <mat-form-field>
+            <mat-label>Purpose</mat-label>
+            <mat-select formControlName="extraPayKindId">
+              <mat-option *ngFor="let extraPayKind of myExtraPayKinds" [value]="extraPayKind.id">
+                {{extraPayKind.purpose}}
+              </mat-option>
+            </mat-select>
+            <mat-error appearance="outline" *ngIf="myValidationErrors.extraPayKindId">
+              {{ myValidationErrors.extraPayKindId }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Player</mat-label>
+            <mat-select formControlName="playerId">
+              <mat-option *ngFor="let chPl of myChoosablePlayers" [value]="chPl.id">
+                {{chPl.display}}
+              </mat-option>
+            </mat-select>
+            <mat-error appearance="outline" *ngIf="myValidationErrors.playerId">
+              {{ myValidationErrors.playerId }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex="90%">
+            <input matInput formControlName="amount" placeholder="Amount">
+            <mat-error appearance="outline" *ngIf="myValidationErrors.amount">
+              {{ myValidationErrors.amount }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
         <button mat-button type="submit" style="width: 50%;"
           class="mat-raised-button mat-primary" 
           [disabled]="!myForm.valid">Save</button>
       </div>
+
     </div>
   </form>
 
