@@ -8,6 +8,9 @@ import { DocumentChangeAction } from 'angularfire2/firestore';
 import { Saison, ISaison } from 'src/app/shared/model/saison.model';
 import { SaisonDataService } from 'src/app/shared/service/saison-data.service';
 import { SettingsService } from 'src/app/shared/service/settings.service';
+import { ExtraPayKind, IExtraPayKind } from 'src/app/shared/model/extra-pay-kind.model';
+import { ExtraPayKindDataService } from 'src/app/shared/service/extra-pay-kind-data.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-edit-settings',
@@ -18,10 +21,12 @@ import { SettingsService } from 'src/app/shared/service/settings.service';
 export class EditSettingsComponent implements OnInit {
   myForm: FormGroup;
   mySaisons: Saison[] = [];
+  myExtraPayKinds: ExtraPayKind[] = [];
   mySettings: Settings;
 
   constructor(private settingsService: SettingsService, 
       private saisonDataService: SaisonDataService, 
+      private extraPayKindDataService: ExtraPayKindDataService, 
       private notificationService: NotificationService) {
     let settings: Settings | null = this.settingsService.settings$.getValue();
     if (settings == null) {
@@ -33,19 +38,32 @@ export class EditSettingsComponent implements OnInit {
       id: new FormControl({value: null, disabled: true}),
       sportName: new FormControl("", Validators.required),
       saisonId: new FormControl("", Validators.required),
+      extraPayKindId: new FormControl("", Validators.required),
+      extraPayAmount: new FormControl(0),
     });
-    this.loadSaisons();
+    this.loadData();
   }
 
-  loadSaisons() {
-    this.saisonDataService.getList().subscribe( dbSaisons => {
+  loadData() {
+    combineLatest(
+      this.saisonDataService.getList(),
+      this.extraPayKindDataService.getList()
+    ).subscribe(([dbSaisonList, dbExtraPayKindList]) => {
       this.mySaisons.length = 0;
-      for (let i: number = 0; i < dbSaisons.length; i++) {
-        let dbSaison: DocumentChangeAction<ISaison> = dbSaisons[i];
+      for (let i: number = 0; i < dbSaisonList.length; i++) {
+        let dbSaison: DocumentChangeAction<ISaison> = dbSaisonList[i];
         this.mySaisons.push(
           new Saison(dbSaison.payload.doc.id, dbSaison.payload.doc.data())
         );
       }
+      this.myExtraPayKinds.length = 0;
+      for (let i: number = 0; i < dbExtraPayKindList.length; i++) {
+        let dbKind: DocumentChangeAction<IExtraPayKind> = dbExtraPayKindList[i];
+        this.myExtraPayKinds.push(
+          new ExtraPayKind(dbKind.payload.doc.id, dbKind.payload.doc.data())
+        );
+      }
+
       this.setFormWithSettings();
     });
   }
@@ -54,13 +72,17 @@ export class EditSettingsComponent implements OnInit {
     this.myForm.setValue({
       id: this.mySettings.id,
       sportName: this.mySettings.sportName,
-      saisonId: this.mySettings.saisonId
+      saisonId: this.mySettings.saisonId,
+      extraPayKindId: this.mySettings.extraPayKindId,
+      extraPayAmount: this.mySettings.extraPayAmount
     });
   }
 
   setSettingsWithForm() {
     this.mySettings.sportName = this.myForm.controls.sportName.value;
     this.mySettings.saisonId = this.myForm.controls.saisonId.value;
+    this.mySettings.extraPayKindId = this.myForm.controls.extraPayKindId.value;
+    this.mySettings.extraPayAmount = this.myForm.controls.extraPayAmount.value;
   }
 
   ngOnInit() {

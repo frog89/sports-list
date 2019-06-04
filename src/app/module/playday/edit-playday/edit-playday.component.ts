@@ -89,9 +89,7 @@ export class EditPlaydayComponent implements OnInit {
       numOfCourts: 1,
       remark: "",
       players: this.fb.array([]),
-      extraPays: this.fb.array([
-        this.addExtraPayFormGroup()
-      ])
+      extraPays: this.fb.array([])
     });
 
     // Players can also be added like this:
@@ -113,11 +111,23 @@ export class EditPlaydayComponent implements OnInit {
     this.loadData();
   }
 
+  getExtraPays(): FormArray {
+    return <FormArray>this.myForm.get("extraPays");
+  }
+
+  onAddExtraPay(): void {
+    this.getExtraPays().push(this.addExtraPayFormGroup());
+  }
+
+  onRemoveExtraPay(index: number): void {
+    this.getExtraPays().removeAt(index);
+  }
+
   addExtraPayFormGroup(): FormGroup {
     return this.fb.group({
-      extraPayKindId: [null, [Validators.required]],
+      extraPayKindId: [this.mySettings.extraPayKindId, [Validators.required]],
       playerId: [null, [Validators.required]],
-      amount: [0, Validators.compose([Validators.required, this.valiBiggerThanZero])]
+      amount: [this.mySettings.extraPayAmount, Validators.compose([Validators.required, this.valiBiggerThanZero])]
     });
   }
 
@@ -280,6 +290,10 @@ export class EditPlaydayComponent implements OnInit {
         display: player.shortAlias
       });
     }
+
+    let extraPayArray: FormArray = this.myForm.get("extraPays") as FormArray;
+    extraPayArray.controls.push(this.addExtraPayFormGroup());
+    
     // Fill FormControls with playday players
     this.setFormWithPlayDay();
   }

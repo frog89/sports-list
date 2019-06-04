@@ -6,7 +6,9 @@
   "Settings": [ {
     "id": "1",
     "sportName": "Badminton",
-    "saisonId": "1"
+    "saisonId": "1",
+    "extraPayKindId": "1",
+    "extraPayAmount": "1"
   }],
   "Saisons": [ {
     "id": "1",

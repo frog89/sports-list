@@ -117,9 +117,15 @@
         </div>
       </div>
 
-      <div formArrayName="extraPays">
-        <div formGroupName="0">
-          <mat-form-field>
+      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="start center">
+        <button mat-button style="margin-right: 5px;"
+          (click)="onAddExtraPay()"
+          class="mat-raised-button mat-primary">Add Extra Pay</button>
+      </div>
+
+      <div formArrayName="extraPays" *ngFor="let extraPay of myForm.get('extraPays').controls; let i=index">
+        <div [formGroupName]="i">
+          <mat-form-field fxFlex="30%">
             <mat-label>Purpose</mat-label>
             <mat-select formControlName="extraPayKindId">
               <mat-option *ngFor="let extraPayKind of myExtraPayKinds" [value]="extraPayKind.id">
@@ -130,7 +136,7 @@
               {{ myValidationErrors.extraPayKindId }}
             </mat-error>
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field fxFlex="30%">
             <mat-label>Player</mat-label>
             <mat-select formControlName="playerId">
               <mat-option *ngFor="let chPl of myChoosablePlayers" [value]="chPl.id">
@@ -141,17 +147,20 @@
               {{ myValidationErrors.playerId }}
             </mat-error>
           </mat-form-field>
-          <mat-form-field fxFlex="90%">
+          <mat-form-field fxFlex="30%">
             <input matInput formControlName="amount" placeholder="Amount">
             <mat-error appearance="outline" *ngIf="myValidationErrors.amount">
               {{ myValidationErrors.amount }}
             </mat-error>
           </mat-form-field>
+          <button fxFlex="10%" mat-icon-button color="warn" (click)="onRemoveExtraPay(i)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
         </div>
       </div>
 
       <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="space-between center">
-        <button mat-button type="submit" style="width: 50%;"
+        <button mat-button type="submit" style="width: 30%;"
           class="mat-raised-button mat-primary" 
           [disabled]="!myForm.valid">Save</button>
       </div>

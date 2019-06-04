@@ -19,6 +19,16 @@
         </ng-container>
       </mat-select>
     </mat-form-field>
+    <mat-form-field>
+      <mat-select formControlName="extraPayKindId" placeholder="Extra Pay Kind">
+        <ng-container *ngFor="let kind of myExtraPayKinds">
+          <mat-option value="{{ kind.id }}">{{ kind.purpose }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input formControlName="extraPayAmount" matInput placeholder="Extra Pay Default amount">
+    </mat-form-field>
     <div fxLayout="row wrap" fxLayoutAlign="start center">
       <button mat-raised-button color="primary" type="submit"
         [disabled]="myForm.invalid"

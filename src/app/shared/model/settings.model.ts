@@ -2,12 +2,16 @@ export interface ISettings {
   id: string;
   sportName: string;
   saisonId: string;
+  extraPayKindId: string;
+  extraPayAmount: number;
 }
 
 export class Settings implements ISettings {
   id: string;
   sportName: string;
   saisonId: string;
+  extraPayKindId: string;
+  extraPayAmount: number;
 
  constructor(aId?: string, saison?: ISettings) {
    if (aId == undefined && saison != undefined ||
@@ -26,5 +30,7 @@ export class Settings implements ISettings {
    this.id = "";
    this.sportName = "";
    this.saisonId = "";
+   this.extraPayKindId = "";
+   this.extraPayAmount = 0;
  }
 }
